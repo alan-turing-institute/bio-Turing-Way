@@ -1,4 +1,4 @@
 [build]
   base = "mynewbook"
-  command = "pip install -r requirements.txt && jupyter-book build . && python -m main build ."
+  command = "pip install -r requirements.txt && jupyter-book build . && python ../main.py build ."
   publish = "_build/html"
