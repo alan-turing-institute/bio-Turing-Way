@@ -134,5 +134,5 @@ def generate_tocs(toc, profiles):
 
 
 if __name__ == "__main__":
-    #main(sys.argv[1:])  # pragma: no cover
-    print (sys.argv[1:])
+    main(sys.argv[1:])  # pragma: no cover
+    print ("Finished editions html generation")
