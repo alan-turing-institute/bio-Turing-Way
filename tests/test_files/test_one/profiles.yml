@@ -1,0 +1,11 @@
+# Generic profiles file for testing.
+PhD:
+  # Note - To include a file, you must include all
+  # of its parents.
+  - intro
+  - setup
+  - reproducible_research/open-data
+DSG:
+  - intro
+  - setup
+  - version_control/git
