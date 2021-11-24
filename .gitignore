@@ -130,5 +130,7 @@ dmypy.json
 
 # netlify CLI
 node_modules
+/dsg/_build/
+/main/_build/
 
 
