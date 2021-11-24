@@ -134,4 +134,6 @@ def generate_tocs(toc, profiles):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])  # pragma: no cover
+    #main(sys.argv[1:])  # pragma: no cover
+    main(['build', 'master'])
+    print (sys.argv[1:])
