@@ -13,6 +13,14 @@ format: jb-book
 root: welcome
 parts:
 - chapters:
+# ===== Guide for Reproducible Research ========================================
+  - file: reproducible-research/reproducible-research
+    sections:
+    - title: Overview
+      file: reproducible-research/overview
+      sections:
+      - title: Definitions
+        file: reproducible-research/overview/overview-definitions
 # ===== Guide for Communication ========================================
   - file: communication/communication
     sections:
