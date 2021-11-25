@@ -32,22 +32,22 @@ for profile_name, toc in profiles.items():
     full_card_string = full_card_string + str(profile_name) + toc_string + title_card_end_string + str(toc) + card_ending_string
 
 
-    # Load the HTML file from each edition
-    profile_directory = str(profile_name)
-    with open("mynewbook_DSG/_build/html/search.html") as f:
-        html_content = f.read()
-        soup = BeautifulSoup(html_content, 'html.parser')
-        toc_html_text = soup.find_all("a",class_="reference internal")
+    # # Load the HTML file from each edition
+    # profile_directory = str(profile_name)
+    # with open("mynewbook_DSG/_build/html/search.html") as f:
+    #     html_content = f.read()
+    #     soup = BeautifulSoup(html_content, 'html.parser')
+    #     toc_html_text = soup.find_all("a",class_="reference internal")
         
-        chapters_string = ""
-        for chapter_html in toc_html_text:
-            chapter_ref_file = str(chapter_html.get('href'))
-            chapter_title = str(chapter_html.get_text())
-            chapter_title = chapter_title.strip()
+    #     chapters_string = ""
+    #     for chapter_html in toc_html_text:
+    #         chapter_ref_file = str(chapter_html.get('href'))
+    #         chapter_title = str(chapter_html.get_text())
+    #         chapter_title = chapter_title.strip()
             
-            chapters_string = chapters_string + "- " + chapter_title + "\n" 
+    #         chapters_string = chapters_string + "- " + chapter_title + "\n" 
 
-        print(chapters_string)
+    #     print(chapters_string)
 
 #Remove the last --- from the string otherwise a blank card is produced. 
 full_card_string = full_card_string[:-len(card_ending_string)] 
@@ -55,6 +55,7 @@ full_card_string = full_card_string[:-len(card_ending_string)]
 
 full_card_string = full_card_string + panel_ending_string
 #print(full_card_string)
+
 
 
 
