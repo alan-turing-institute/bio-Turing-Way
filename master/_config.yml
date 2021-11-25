@@ -57,4 +57,4 @@ sphinx:
 bibtex_bibfiles:
     - _bibliography/references.bib
 
-only_build_toc_files: true
+# only_build_toc_files: true

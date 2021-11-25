@@ -39,6 +39,10 @@ def build(book_path):
             # Overwrite the _toc.yml
             dump(new_toc, f)
 
+        # @Iain: Is this a good place to overwrite config.yml?
+        # 1. title : "The Turing Way".concat(" - profile_name")
+        # 2. logo : "./figures/logo/logo.jpg" *nice to have
+
         # Call Jupyter Book to build the copy
         run(["jupyter-book", "build", new_path], check=True)
 

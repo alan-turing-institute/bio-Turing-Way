@@ -128,12 +128,16 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# netlify CLI
-node_modules
+# netlify
 /dsg/_build/
 /master/_build/
 /master_DSG/
 /master/_DSG/
+
+# vscode stuff
+ dsg/.DS_Store
+ .vscode/
+
 
 
 
