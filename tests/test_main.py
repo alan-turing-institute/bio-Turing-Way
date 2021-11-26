@@ -5,7 +5,15 @@ from unittest import mock
 
 from yaml import Loader, load
 
-from main import build, generate_tocs, get_toc_and_profiles, main, mask_parts, mask_toc
+from main import (
+    build_all,
+    build_edition,
+    generate_tocs,
+    get_toc_and_profiles,
+    main,
+    mask_parts,
+    mask_toc,
+)
 
 
 class TestMain(unittest.TestCase):
@@ -194,52 +202,54 @@ class TestGenerateTocs(unittest.TestCase):
 class TestBuild(unittest.TestCase):
     """Test the build function from the main module."""
 
-    def test_build(self):
+    def test_build_edition(self):
+        with mock.patch("main.copytree") as mock_copy:
+            with mock.patch("main.open") as mock_open:
+                with mock.patch("main.dump") as mock_dump:
+                    with mock.patch("main.run") as mock_run:
+                        with mock.patch("main.Path.mkdir") as mock_mkdir:
+
+                            build_edition("dsg", {"new": "toc"}, Path("mybook"))
+
+                            mock_mkdir.assert_called_once_with(
+                                parents=True, exist_ok=True
+                            )
+
+                        mock_run.assert_called_once_with(
+                            ["jupyter-book", "build", Path("mybook_dsg")],
+                            check=True,
+                        )
+
+                    mock_dump.assert_called_once_with(
+                        {"new": "toc"},
+                        mock_open.return_value.__enter__.return_value,
+                    )
+
+                mock_open.assert_called_with(Path("mybook_dsg/_toc.yml"), "w")
+
+            mock_copy.assert_has_calls(
+                [
+                    mock.call(Path("mybook"), Path("mybook_dsg"), dirs_exist_ok=True),
+                    mock.call(
+                        Path("mybook_dsg/_build/html"),
+                        Path("mybook/_build/html/editions/dsg"),
+                        dirs_exist_ok=True,
+                    ),
+                ]
+            )
+
+    def test_build_all(self):
         with mock.patch("main.get_toc_and_profiles") as mock_get:
             mock_get.return_value = {"a": "toc"}, {"dsg": "profile"}
 
             with mock.patch("main.generate_tocs") as mock_generate:
                 mock_generate.return_value = [("dsg", {"new": "toc"})]
 
-                with mock.patch("main.copytree") as mock_copy:
+                with mock.patch("main.build_edition") as mock_edition:
+                    build_all(Path("mybook"))
 
-                    with mock.patch("main.open") as mock_open:
-
-                        with mock.patch("main.dump") as mock_dump:
-
-                            with mock.patch("main.run") as mock_run:
-
-                                with mock.patch("main.Path.mkdir") as mock_mkdir:
-
-                                    build(Path("mybook"))
-
-                                    mock_mkdir.assert_called_once_with(
-                                        parents=True, exist_ok=True
-                                    )
-
-                                mock_run.assert_called_once_with(
-                                    ["jupyter-book", "build", Path("mybook_dsg")],
-                                    check=True,
-                                )
-
-                            mock_dump.assert_called_once_with(
-                                {"new": "toc"},
-                                mock_open.return_value.__enter__.return_value,
-                            )
-
-                        mock_open.assert_called_with(Path("mybook_dsg/_toc.yml"), "w")
-
-                    mock_copy.assert_has_calls(
-                        [
-                            mock.call(
-                                Path("mybook"), Path("mybook_dsg"), dirs_exist_ok=True
-                            ),
-                            mock.call(
-                                Path("mybook_dsg/_build/html"),
-                                Path("mybook/_build/html/editions/dsg"),
-                                dirs_exist_ok=True,
-                            ),
-                        ]
+                    mock_edition.assert_called_once_with(
+                        "dsg", {"new": "toc"}, Path("mybook")
                     )
 
                 mock_generate.assert_called_once_with({"a": "toc"}, {"dsg": "profile"})
