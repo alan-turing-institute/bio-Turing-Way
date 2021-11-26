@@ -1,8 +1,9 @@
 """Generate different editions of the book, as determined by profiles.yml."""
+import shutil
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
-from shutil import copytree
+from shutil import copytree, ignore_patterns
 from subprocess import run
 
 from yaml import Loader, dump, load
@@ -33,7 +34,7 @@ def build(book_path):
         editions_path.mkdir(parents=True, exist_ok=True)
 
         # Copy the whole book
-        copytree(book_path, new_path, dirs_exist_ok=True)
+        copytree(book_path, new_path, dirs_exist_ok=True, ignore=ignore_patterns('_build'))
 
         with open(new_path / "_toc.yml", "w") as f:
             # Overwrite the _toc.yml
@@ -51,7 +52,7 @@ def build(book_path):
             new_path / "_build/html", editions_path / profile_name, dirs_exist_ok=True
         )
 
-        # ToDo - Delete the new_path after build?
+        shutil.rmtree(new_path)
 
 
 def main(args):
@@ -138,6 +139,6 @@ def generate_tocs(toc, profiles):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])  # pragma: no cover
-    # main(['build', 'master'])
-    print ("Finish building dsg pages")
+    #main(sys.argv[1:])  # pragma: no cover
+    main(['build', 'mynewbook'])
+    print ("Finish building edition pages")
