@@ -1,4 +1,5 @@
 """Generate different editions of the book, as determined by profiles.yml."""
+import shutil
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
@@ -19,9 +20,21 @@ def get_toc_and_profiles(book_path):
 
     return toc, profiles
 
+def overwriteConfig(new_path, profile_name):
+    with open(new_path / "_config.yml") as f:
+        config = load(f, Loader=Loader)
+        if ("title" in config):
+            config['title'] = "The Turing Way "+profile_name
+            with open(new_path / "_config.yml", "w") as f:
+                # Overwrite the _config.yml
+                dump(config, f)
 
 def build(book_path):
     """Build the book's other editions."""
+    toc, profiles = get_toc_and_profiles(book_path)
+
+    for profile_name, new_toc in generate_tocs(toc, profiles):
+        print(profile_name)
 
     toc, profiles = get_toc_and_profiles(book_path)
 
@@ -39,9 +52,7 @@ def build(book_path):
             # Overwrite the _toc.yml
             dump(new_toc, f)
 
-        # @Iain: Is this a good place to overwrite config.yml?
-        # 1. title : "The Turing Way".concat(" - profile_name")
-        # 2. logo : "./figures/logo/logo.jpg" *nice to have
+        overwriteConfig(new_path=new_path, profile_name=profile_name)
 
         # Call Jupyter Book to build the copy
         run(["jupyter-book", "build", new_path], check=True)
@@ -139,5 +150,5 @@ def generate_tocs(toc, profiles):
 
 if __name__ == "__main__":
     main(sys.argv[1:])  # pragma: no cover
-    # main(['build', 'master'])
-    print ("Finish building dsg pages")
+    # main(['build', 'mynewbook'])
+    print ("Finished building editions pages")
