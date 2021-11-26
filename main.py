@@ -5,6 +5,7 @@ from argparse import ArgumentParser
 from pathlib import Path
 from shutil import copytree
 from subprocess import run
+from typing import Dict
 
 from yaml import Loader, dump, load
 
@@ -20,15 +21,26 @@ def get_toc_and_profiles(book_path):
 
     return toc, profiles
 
-def overwriteConfig(new_path, profile_name):
+def openConfig(new_path:str):
     with open(new_path / "_config.yml") as f:
         config = load(f, Loader=Loader)
-        if ("title" in config):
-            config['title'] = "The Turing Way "+profile_name
-            with open(new_path / "_config.yml", "w") as f:
-                # Overwrite the _config.yml
-                dump(config, f)
+    return config
 
+def editTitle(config:Dict, newTitle:str):
+    if ("title" in config):
+        config = {**config, 'title':"The Turing Way "+newTitle}
+    return config
+        
+def writeConfig(new_path:str, configContent:Dict):
+    with open(new_path / "_config.yml", "w") as f:
+        # Overwrite the _config.yml
+        dump(configContent, f)
+
+def customiseConfig(new_path:str, profile_name:str):
+    config = openConfig(new_path=new_path)
+    config = editTitle(config=config, newTitle=profile_name)
+    writeConfig(new_path=new_path, configContent=config)
+        
 def build(book_path):
     """Build the book's other editions."""
     toc, profiles = get_toc_and_profiles(book_path)
@@ -52,7 +64,7 @@ def build(book_path):
             # Overwrite the _toc.yml
             dump(new_toc, f)
 
-        overwriteConfig(new_path=new_path, profile_name=profile_name)
+        customiseConfig(new_path=new_path, profile_name=profile_name)
 
         # Call Jupyter Book to build the copy
         run(["jupyter-book", "build", new_path], check=True)
