@@ -141,7 +141,5 @@ dmypy.json
  dsg/.DS_Store
  .DS_Store
  .vscode/
-
-
-
-
+.fake
+.ionide

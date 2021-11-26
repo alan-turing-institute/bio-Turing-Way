@@ -26,9 +26,9 @@ def openConfig(new_path:str):
         config = load(f, Loader=Loader)
     return config
 
-def editTitle(config:Dict, newTitle:str):
+def editConfigTitle(config:Dict, newTitle:str):
     if ("title" in config):
-        config = {**config, 'title':"The Turing Way "+newTitle}
+        config = {**config, 'title':"The Turing Way "+newTitle+" Edition"}
     return config
         
 def writeConfig(new_path:str, configContent:Dict):
@@ -36,20 +36,15 @@ def writeConfig(new_path:str, configContent:Dict):
         # Overwrite the _config.yml
         dump(configContent, f)
 
-def customiseConfig(new_path:str, profile_name:str):
+def customiseConfig(new_path:str, newTitle:str):
     config = openConfig(new_path=new_path)
-    config = editTitle(config=config, newTitle=profile_name)
+    config = editConfigTitle(config=config, newTitle=newTitle)
     writeConfig(new_path=new_path, configContent=config)
         
 def build(book_path):
     """Build the book's other editions."""
     toc, profiles = get_toc_and_profiles(book_path)
-
-    for profile_name, new_toc in generate_tocs(toc, profiles):
-        print(profile_name)
-
-    toc, profiles = get_toc_and_profiles(book_path)
-
+    
     for profile_name, new_toc in generate_tocs(toc, profiles):
         new_path = book_path.parent / (book_path.name + "_" + profile_name)
         editions_path = book_path / "_build/html/editions"
@@ -64,7 +59,7 @@ def build(book_path):
             # Overwrite the _toc.yml
             dump(new_toc, f)
 
-        customiseConfig(new_path=new_path, profile_name=profile_name)
+        customiseConfig(new_path=new_path, newTitle=profile_name)
 
         # Call Jupyter Book to build the copy
         run(["jupyter-book", "build", new_path], check=True)
@@ -161,6 +156,6 @@ def generate_tocs(toc, profiles):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])  # pragma: no cover
-    # main(['build', 'mynewbook'])
+    #main(sys.argv[1:])  # pragma: no cover
+    main(['build', 'mynewbook'])
     print ("Finished building editions pages")

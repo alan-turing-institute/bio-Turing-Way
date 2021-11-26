@@ -5,8 +5,7 @@ from unittest import mock
 
 from yaml import Loader, load
 
-from main import build, generate_tocs, get_toc_and_profiles, main, mask_parts, mask_toc
-
+from main import build, editConfigTitle, generate_tocs, get_toc_and_profiles, main, mask_parts, mask_toc, editConfigTitle
 
 class TestMain(unittest.TestCase):
     """Test main function from the main module."""
@@ -248,7 +247,7 @@ class TestBuild(unittest.TestCase):
 
 
 class TestGetTocAndProfiles(unittest.TestCase):
-    """Tet the get_toc_and_profiles function from the main module."""
+    """Test the get_toc_and_profiles function from the main module."""
 
     def test_simple_case(self):
         """Check that open() and load() are called."""
@@ -270,6 +269,19 @@ class TestGetTocAndProfiles(unittest.TestCase):
                 self.assertEqual(44, toc)
                 self.assertEqual(44, profiles)
 
+class TestEditConfigTitle(unittest.TestCase):
+    """Test that title is edited in config.yaml"""
+
+    def test_edit_case(self):
+        """Test that title edits are made"""
+        configDict = {
+            "title":"The Turing Way Main Edition"
+        }
+        editedConfigDict = editConfigTitle(config=configDict, newTitle="Test")
+        expectedConfig = {
+            "title":"The Turing Way Test Edition"
+        }
+        self.assertDictEqual(expectedConfig, editedConfigDict)
 
 if __name__ == "__main__":
     unittest.main()
