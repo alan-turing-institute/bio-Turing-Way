@@ -49,6 +49,8 @@ def build(book_path):
 
         # ToDo - Delete the new_path after build?
 
+    print("Finished editions html generation")
+
 
 def main(args):
     """Parse arguments and call sub-commands as appropriate."""
@@ -135,4 +137,3 @@ def generate_tocs(toc, profiles):
 
 if __name__ == "__main__":
     main(sys.argv[1:])  # pragma: no cover
-    print ("Finished editions html generation")
