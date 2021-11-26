@@ -21,7 +21,7 @@ class TestMain(unittest.TestCase):
 
     def test_main(self):
         # Redirect stdout
-        with mock.patch("main.build") as mock_build:
+        with mock.patch("main.build_all") as mock_build:
             main(["build", "/path/to/my/book/"])
 
             mock_build.assert_called_once_with(book_path=Path("/path/to/my/book/"))
@@ -209,8 +209,11 @@ class TestBuild(unittest.TestCase):
                     with mock.patch("main.run") as mock_run:
                         with mock.patch("main.Path.mkdir") as mock_mkdir:
 
-                            build_edition("dsg", {"new": "toc"}, Path("mybook"))
+                            result = build_edition(
+                                "dsg", {"new": "toc"}, Path("mybook")
+                            )
 
+                            assert result == Path("mybook_dsg")
                             mock_mkdir.assert_called_once_with(
                                 parents=True, exist_ok=True
                             )
@@ -239,22 +242,30 @@ class TestBuild(unittest.TestCase):
             )
 
     def test_build_all(self):
-        with mock.patch("main.get_toc_and_profiles") as mock_get:
-            mock_get.return_value = {"a": "toc"}, {"dsg": "profile"}
+        with mock.patch("main.run") as mock_run:
+            with mock.patch("main.get_toc_and_profiles") as mock_get:
+                mock_get.return_value = {"a": "toc"}, {"dsg": "profile"}
 
-            with mock.patch("main.generate_tocs") as mock_generate:
-                mock_generate.return_value = [("dsg", {"new": "toc"})]
+                with mock.patch("main.generate_tocs") as mock_generate:
+                    mock_generate.return_value = [("dsg", {"new": "toc"})]
 
-                with mock.patch("main.build_edition") as mock_edition:
-                    build_all(Path("mybook"))
+                    with mock.patch("main.build_edition") as mock_edition:
+                        build_all(Path("mybook"))
 
-                    mock_edition.assert_called_once_with(
-                        "dsg", {"new": "toc"}, Path("mybook")
+                        mock_edition.assert_called_once_with(
+                            "dsg", {"new": "toc"}, Path("mybook")
+                        )
+
+                    mock_generate.assert_called_once_with(
+                        {"a": "toc"}, {"dsg": "profile"}
                     )
-
-                mock_generate.assert_called_once_with({"a": "toc"}, {"dsg": "profile"})
-
-            mock_get.assert_called_once_with(Path("mybook"))
+                mock_get.assert_called_once_with(Path("mybook"))
+            mock_run.assert_has_calls(
+                [
+                    mock.call(["jupyter-book", "clean", Path("mybook")], check=True),
+                    mock.call(["jupyter-book", "build", Path("mybook")], check=True),
+                ]
+            )
 
 
 class TestGetTocAndProfiles(unittest.TestCase):

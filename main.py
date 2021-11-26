@@ -24,10 +24,6 @@ def build_edition(profile_name, new_toc, book_path):
     """Copy book_path to make an edition called profile_name and containing new_toc."""
 
     new_path = book_path.parent / (book_path.name + "_" + profile_name)
-    editions_path = book_path / "_build/html/editions"
-
-    # Make the directory if it doesn't already exist
-    editions_path.mkdir(parents=True, exist_ok=True)
 
     # Copy the whole book
     copytree(book_path, new_path, dirs_exist_ok=True)
@@ -39,12 +35,21 @@ def build_edition(profile_name, new_toc, book_path):
     # Call Jupyter Book to build the copy
     run(["jupyter-book", "build", new_path], check=True)
 
+    # Make the directory, if it doesn't already exist
+    editions_path = book_path / "_build/html/editions"
+    editions_path.mkdir(parents=True, exist_ok=True)
+
     # Copy the built html to the editions directory
     copytree(new_path / "_build/html", editions_path / profile_name, dirs_exist_ok=True)
 
+    return new_path
+
 
 def build_all(book_path):
-    """Build the book's other editions."""
+    """Build the book and its other editions."""
+
+    # Clean the book_path/_build dir to remove previous _build/html/edition/ dirs
+    run(["jupyter-book", "clean", book_path], check=True)
 
     toc, profiles = get_toc_and_profiles(book_path)
 
@@ -52,6 +57,9 @@ def build_all(book_path):
         build_edition(profile_name, new_toc, book_path)
 
         # ToDo - Delete the new_path after build?
+
+    # Clean the book_path/_build dir to remove previous _build/html/edition/ dirs
+    run(["jupyter-book", "build", book_path], check=True)
 
     print("Finished editions html generation")
 
