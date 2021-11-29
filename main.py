@@ -28,7 +28,8 @@ def openConfig(new_path:str):
 
 def editConfigTitle(config:Dict, newTitle:str):
     if ("title" in config):
-        config = {**config, 'title':"The Turing Way "+newTitle+" Edition"}
+        oldTitle = config['title']
+        config = {**config, 'title':oldTitle +" "+newTitle+" Edition"}
     return config
         
 def writeConfig(new_path:str, configContent:Dict):
@@ -156,6 +157,6 @@ def generate_tocs(toc, profiles):
 
 
 if __name__ == "__main__":
-    #main(sys.argv[1:])  # pragma: no cover
-    main(['build', 'mynewbook'])
+    main(sys.argv[1:])  # pragma: no cover
+    # main(['build', 'mynewbook'])
     print ("Finished building editions pages")

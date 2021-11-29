@@ -275,7 +275,7 @@ class TestEditConfigTitle(unittest.TestCase):
     def test_edit_case(self):
         """Test that title edits are made"""
         configDict = {
-            "title":"The Turing Way Main Edition"
+            "title":"The Turing Way"
         }
         editedConfigDict = editConfigTitle(config=configDict, newTitle="Test")
         expectedConfig = {
