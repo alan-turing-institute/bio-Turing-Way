@@ -2,7 +2,7 @@
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
-from shutil import copytree
+from shutil import copytree, ignore_patterns, rmtree
 from subprocess import run
 
 from yaml import Loader, dump, load
@@ -26,7 +26,7 @@ def build_edition(profile_name, new_toc, book_path):
     new_path = book_path.parent / (book_path.name + "_" + profile_name)
 
     # Copy the whole book
-    copytree(book_path, new_path, dirs_exist_ok=True)
+    copytree(book_path, new_path, dirs_exist_ok=True, ignore=ignore_patterns("_build"))
 
     with open(new_path / "_toc.yml", "w") as f:
         # Overwrite the _toc.yml
@@ -41,7 +41,7 @@ def build_edition(profile_name, new_toc, book_path):
 
     # Copy the built html to the editions directory
     copytree(new_path / "_build/html", editions_path / profile_name, dirs_exist_ok=True)
-
+    rmtree(new_path)
     return new_path
 
 
@@ -148,4 +148,5 @@ def generate_tocs(toc, profiles):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])  # pragma: no cover
+    # main(sys.argv[1:])  # pragma: no cover
+    main(['build','master']) 
