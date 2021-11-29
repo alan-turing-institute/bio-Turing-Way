@@ -2,10 +2,11 @@
 import unittest
 from pathlib import Path
 from unittest import mock
+from shutil import ignore_patterns
 
 from yaml import Loader, load
 
-from main import build, generate_tocs, get_toc_and_profiles, main, mask_parts, mask_toc
+from main import build, generate_tocs, get_toc_and_profiles, main, mask_parts, mask_toc, IGNORE_BUILD_PATTERN
 
 
 class TestMain(unittest.TestCase):
@@ -202,16 +203,17 @@ class TestBuild(unittest.TestCase):
                 mock_generate.return_value = [("dsg", {"new": "toc"})]
 
                 with mock.patch("main.copytree") as mock_copy:
-
                     with mock.patch("main.open") as mock_open:
-
                         with mock.patch("main.dump") as mock_dump:
-
                             with mock.patch("main.run") as mock_run:
-
                                 with mock.patch("main.Path.mkdir") as mock_mkdir:
+                                    with mock.patch("main.rmtree") as mock_rm:
 
-                                    build(Path("mybook"))
+                                        build(Path("mybook"))
+
+                                        mock_rm.assert_called_once_with(
+                                            Path("mybook_dsg")
+                                        )
 
                                     mock_mkdir.assert_called_once_with(
                                         parents=True, exist_ok=True
@@ -229,10 +231,11 @@ class TestBuild(unittest.TestCase):
 
                         mock_open.assert_called_with(Path("mybook_dsg/_toc.yml"), "w")
 
+                    # ignore_build_pattern = ignore_patterns("_build")
                     mock_copy.assert_has_calls(
                         [
                             mock.call(
-                                Path("mybook"), Path("mybook_dsg"), dirs_exist_ok=True
+                                Path("mybook"), Path("mybook_dsg"), dirs_exist_ok=True, ignore=IGNORE_BUILD_PATTERN
                             ),
                             mock.call(
                                 Path("mybook_dsg/_build/html"),

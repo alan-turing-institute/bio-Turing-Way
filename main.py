@@ -3,11 +3,13 @@ import shutil
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
-from shutil import copytree, ignore_patterns
+from shutil import copytree, ignore_patterns, rmtree
 from subprocess import run
 
 from yaml import Loader, dump, load
 
+
+IGNORE_BUILD_PATTERN = ignore_patterns('_build')
 
 def get_toc_and_profiles(book_path):
     """Get the contents of _toc.yml and profiles.yml."""
@@ -34,7 +36,7 @@ def build(book_path):
         editions_path.mkdir(parents=True, exist_ok=True)
 
         # Copy the whole book
-        copytree(book_path, new_path, dirs_exist_ok=True, ignore=ignore_patterns('_build'))
+        copytree(book_path, new_path, dirs_exist_ok=True, ignore=IGNORE_BUILD_PATTERN)
 
         with open(new_path / "_toc.yml", "w") as f:
             # Overwrite the _toc.yml
@@ -52,7 +54,7 @@ def build(book_path):
             new_path / "_build/html", editions_path / profile_name, dirs_exist_ok=True
         )
 
-        shutil.rmtree(new_path)
+        rmtree(new_path)
 
 
 def main(args):
