@@ -1,9 +1,11 @@
 """Generate different editions of the book, as determined by profiles.yml."""
+import shutil
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
 from shutil import copytree
 from subprocess import run
+from typing import Dict
 
 from yaml import Loader, dump, load
 
@@ -19,12 +21,31 @@ def get_toc_and_profiles(book_path):
 
     return toc, profiles
 
+def openConfig(new_path:str):
+    with open(new_path / "_config.yml") as f:
+        config = load(f, Loader=Loader)
+    return config
 
+def editConfigTitle(config:Dict, newTitle:str):
+    if ("title" in config):
+        oldTitle = config['title']
+        config = {**config, 'title':oldTitle +" "+newTitle+" Edition"}
+    return config
+        
+def writeConfig(new_path:str, configContent:Dict):
+    with open(new_path / "_config.yml", "w") as f:
+        # Overwrite the _config.yml
+        dump(configContent, f)
+
+def customiseConfig(new_path:str, newTitle:str):
+    config = openConfig(new_path=new_path)
+    config = editConfigTitle(config=config, newTitle=newTitle)
+    writeConfig(new_path=new_path, configContent=config)
+        
 def build(book_path):
     """Build the book's other editions."""
-
     toc, profiles = get_toc_and_profiles(book_path)
-
+    
     for profile_name, new_toc in generate_tocs(toc, profiles):
         new_path = book_path.parent / (book_path.name + "_" + profile_name)
         editions_path = book_path / "_build/html/editions"
@@ -39,9 +60,7 @@ def build(book_path):
             # Overwrite the _toc.yml
             dump(new_toc, f)
 
-        # @Iain: Is this a good place to overwrite config.yml?
-        # 1. title : "The Turing Way".concat(" - profile_name")
-        # 2. logo : "./figures/logo/logo.jpg" *nice to have
+        customiseConfig(new_path=new_path, newTitle=profile_name)
 
         # Call Jupyter Book to build the copy
         run(["jupyter-book", "build", new_path], check=True)
@@ -139,5 +158,5 @@ def generate_tocs(toc, profiles):
 
 if __name__ == "__main__":
     main(sys.argv[1:])  # pragma: no cover
-    # main(['build', 'master'])
-    print ("Finish building dsg pages")
+    # main(['build', 'mynewbook'])
+    print ("Finished building editions pages")
