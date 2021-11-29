@@ -21,6 +21,8 @@ def get_toc_and_profiles(book_path):
 
     return toc, profiles
 
+
+
 def openConfig(new_path:str):
     with open(new_path / "_config.yml") as f:
         config = load(f, Loader=Loader)
@@ -41,37 +43,39 @@ def customiseConfig(new_path:str, newTitle:str):
     config = openConfig(new_path=new_path)
     config = editConfigTitle(config=config, newTitle=newTitle)
     writeConfig(new_path=new_path, configContent=config)
-        
-def build(book_path):
-    """Build the book's other editions."""
+
+def build_edition(profile_name, new_toc, book_path):
+  """Copy book_path to make an edition called profile_name and containing new_toc."""
+
+  new_path = book_path.parent / (book_path.name + "_" + profile_name)
+
+  # Copy the whole book
+  copytree(book_path, new_path, dirs_exist_ok=True)
+
+  # Customise config title
+  customiseConfig(new_path=new_path, newTitle=profile_name)
+
+  with open(new_path / "_toc.yml", "w") as f:
+      # Overwrite the _toc.yml
+      dump(new_toc, f)
+
+def build_all(book_path):
+    """Build the book and its other editions."""
+
+    # Clean the book_path/_build dir to remove previous _build/html/edition/ dirs
+    run(["jupyter-book", "clean", book_path], check=True)
+
     toc, profiles = get_toc_and_profiles(book_path)
-    
+
     for profile_name, new_toc in generate_tocs(toc, profiles):
-        new_path = book_path.parent / (book_path.name + "_" + profile_name)
-        editions_path = book_path / "_build/html/editions"
-
-        # Make the directory if it doesn't already exist
-        editions_path.mkdir(parents=True, exist_ok=True)
-
-        # Copy the whole book
-        copytree(book_path, new_path, dirs_exist_ok=True)
-
-        with open(new_path / "_toc.yml", "w") as f:
-            # Overwrite the _toc.yml
-            dump(new_toc, f)
-
-        customiseConfig(new_path=new_path, newTitle=profile_name)
-
-        # Call Jupyter Book to build the copy
-        run(["jupyter-book", "build", new_path], check=True)
-
-        # Copy the built html to the editions directory
-        copytree(
-            new_path / "_build/html", editions_path / profile_name, dirs_exist_ok=True
-        )
+        build_edition(profile_name, new_toc, book_path)
 
         # ToDo - Delete the new_path after build?
 
+    # Clean the book_path/_build dir to remove previous _build/html/edition/ dirs
+    run(["jupyter-book", "build", book_path], check=True)
+
+    print("Finished editions html generation")
 
 def main(args):
     """Parse arguments and call sub-commands as appropriate."""
@@ -84,7 +88,7 @@ def main(args):
     build_subparser.add_argument(
         "book_path", type=Path, help="the path to the root of your Jupyter Book"
     )
-    build_subparser.set_defaults(func=build)
+    build_subparser.set_defaults(func=build_all)
 
     # Call the sub-parser's function with the other arguments
     arguments = parser.parse_args(args)
@@ -158,5 +162,3 @@ def generate_tocs(toc, profiles):
 
 if __name__ == "__main__":
     main(sys.argv[1:])  # pragma: no cover
-    # main(['build', 'mynewbook'])
-    print ("Finished building editions pages")
