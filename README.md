@@ -13,6 +13,7 @@
 1. Set Python 3.8 as the local version to use with `pyenv local 3.8.12`
 1. Make a Python 3.8 virtual environment with `virtualenv venv`
 1. Activate it with `source venv/bin/activate`
+1. Install pre-commit hooks with `pre-commit install`
 
 ### Run
 
