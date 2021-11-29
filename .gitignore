@@ -133,11 +133,13 @@ dmypy.json
 /master/_build/
 /master_DSG/
 /master/_DSG/
+/mynewbook/_build/
+/mynewbook_DSG/
+/mynewbook_enrichment/
 
 # vscode stuff
  dsg/.DS_Store
+ .DS_Store
  .vscode/
-
-
-
-
+.fake
+.ionide
