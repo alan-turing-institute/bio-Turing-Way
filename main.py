@@ -1,9 +1,8 @@
 """Generate different editions of the book, as determined by profiles.yml."""
-import shutil
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
-from shutil import copytree
+from shutil import copytree, rmtree
 from subprocess import run
 from typing import Dict
 
@@ -22,42 +21,45 @@ def get_toc_and_profiles(book_path):
     return toc, profiles
 
 
-
-def openConfig(new_path:str):
+def open_config(new_path: str):
     with open(new_path / "_config.yml") as f:
         config = load(f, Loader=Loader)
     return config
 
-def editConfigTitle(config:Dict, newTitle:str):
-    if ("title" in config):
-        oldTitle = config['title']
-        config = {**config, 'title':oldTitle +" "+newTitle+" Edition"}
+
+def edit_config_title(config: Dict, new_title: str):
+    if "title" in config:
+        old_title = config["title"]
+        config = {**config, "title": old_title + " " + new_title + " Edition"}
     return config
-        
-def writeConfig(new_path:str, configContent:Dict):
+
+
+def write_config(new_path: str, config_content: Dict):
     with open(new_path / "_config.yml", "w") as f:
         # Overwrite the _config.yml
-        dump(configContent, f)
+        dump(config_content, f)
 
-def customiseConfig(new_path:str, newTitle:str):
-    config = openConfig(new_path=new_path)
-    config = editConfigTitle(config=config, newTitle=newTitle)
-    writeConfig(new_path=new_path, configContent=config)
+
+def customise_config(new_path: str, new_title: str):
+    config = open_config(new_path=new_path)
+    config = edit_config_title(config=config, new_title=new_title)
+    write_config(new_path=new_path, config_content=config)
+
 
 def build_edition(profile_name, new_toc, book_path):
-  """Copy book_path to make an edition called profile_name and containing new_toc."""
+    """Copy book_path to make an edition called profile_name and containing new_toc."""
 
-  new_path = book_path.parent / (book_path.name + "_" + profile_name)
+    new_path = book_path.parent / (book_path.name + "_" + profile_name)
 
-  # Copy the whole book
-  copytree(book_path, new_path, dirs_exist_ok=True)
+    copytree(book_path, new_path, dirs_exist_ok=True)
 
-  # Customise config title
-  customiseConfig(new_path=new_path, newTitle=profile_name)
+    # Customise config title
+    customise_config(new_path=new_path, new_title=profile_name)
 
-  with open(new_path / "_toc.yml", "w") as f:
-      # Overwrite the _toc.yml
-      dump(new_toc, f)
+    with open(new_path / "_toc.yml", "w") as f:
+        # Overwrite the _toc.yml
+        dump(new_toc, f)
+
 
 def build_all(book_path):
     """Build the book and its other editions."""
@@ -67,15 +69,29 @@ def build_all(book_path):
 
     toc, profiles = get_toc_and_profiles(book_path)
 
-    for profile_name, new_toc in generate_tocs(toc, profiles):
+    profiles_and_tocs = list(generate_tocs(toc, profiles))
+    for profile_name, new_toc in profiles_and_tocs:
         build_edition(profile_name, new_toc, book_path)
 
-        # ToDo - Delete the new_path after build?
-
-    # Clean the book_path/_build dir to remove previous _build/html/edition/ dirs
     run(["jupyter-book", "build", book_path], check=True)
 
+    # Make the directory, if it doesn't already exist
+    editions_path = book_path / "_build/html/editions"
+    editions_path.mkdir(parents=True, exist_ok=True)
+
+    for profile_name, _ in profiles_and_tocs:
+        new_path = book_path.parent / (book_path.name + "_" + profile_name)
+        run(["jupyter-book", "build", new_path], check=True)
+
+        # Copy the built html to the editions directory
+        copytree(
+            new_path / "_build/html", editions_path / profile_name, dirs_exist_ok=True
+        )
+
+        rmtree(new_path)
+
     print("Finished editions html generation")
+
 
 def main(args):
     """Parse arguments and call sub-commands as appropriate."""

@@ -32,6 +32,8 @@ jobs:
       # Will run our tests with coverage for us
       - name: pre-commit
         uses: pre-commit/action@v2.0.3
+        with:
+          extra_args: --files main.py tests/test_main.py
 
       - name: Run unit tests
         run: |

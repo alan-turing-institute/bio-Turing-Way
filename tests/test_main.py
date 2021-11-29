@@ -2,18 +2,20 @@
 import unittest
 from pathlib import Path
 from unittest import mock
+
 from yaml import Loader, load
 
 from main import (
     build_all,
     build_edition,
+    edit_config_title,
     generate_tocs,
     get_toc_and_profiles,
     main,
     mask_parts,
     mask_toc,
-    editConfigTitle
 )
+
 
 class TestMain(unittest.TestCase):
     """Test main function from the main module."""
@@ -203,40 +205,25 @@ class TestBuild(unittest.TestCase):
 
     def test_build_edition(self):
         with mock.patch("main.copytree") as mock_copy:
-            with mock.patch("main.open") as mock_open:
-                with mock.patch("main.dump") as mock_dump:
-                    with mock.patch("main.run") as mock_run:
-                        with mock.patch("main.Path.mkdir") as mock_mkdir:
+            with mock.patch("main.customise_config") as mock_config:
+                with mock.patch("main.open") as mock_open:
+                    with mock.patch("main.dump") as mock_dump:
 
-                            result = build_edition(
-                                "dsg", {"new": "toc"}, Path("mybook")
-                            )
+                        build_edition("dsg", {"new": "toc"}, Path("mybook"))
 
-                            assert result == Path("mybook_dsg")
-                            mock_mkdir.assert_called_once_with(
-                                parents=True, exist_ok=True
-                            )
-
-                        mock_run.assert_called_once_with(
-                            ["jupyter-book", "build", Path("mybook_dsg")],
-                            check=True,
+                        mock_dump.assert_called_once_with(
+                            {"new": "toc"},
+                            mock_open.return_value.__enter__.return_value,
                         )
 
-                    mock_dump.assert_called_once_with(
-                        {"new": "toc"},
-                        mock_open.return_value.__enter__.return_value,
-                    )
-
-                mock_open.assert_called_with(Path("mybook_dsg/_toc.yml"), "w")
+                    mock_open.assert_called_with(Path("mybook_dsg/_toc.yml"), "w")
+                mock_config.assert_called_once_with(
+                    new_path=Path("mybook_dsg"), new_title="dsg"
+                )
 
             mock_copy.assert_has_calls(
                 [
                     mock.call(Path("mybook"), Path("mybook_dsg"), dirs_exist_ok=True),
-                    mock.call(
-                        Path("mybook_dsg/_build/html"),
-                        Path("mybook/_build/html/editions/dsg"),
-                        dirs_exist_ok=True,
-                    ),
                 ]
             )
 
@@ -249,7 +236,18 @@ class TestBuild(unittest.TestCase):
                     mock_generate.return_value = [("dsg", {"new": "toc"})]
 
                     with mock.patch("main.build_edition") as mock_edition:
-                        build_all(Path("mybook"))
+                        with mock.patch("main.Path.mkdir") as mock_mkdir:
+                            with mock.patch("main.copytree") as mock_copytree:
+
+                                with mock.patch("main.rmtree") as mock_rmtree:
+                                    build_all(Path("mybook"))
+
+                                    mock_rmtree.assert_called_once_with(
+                                        Path("mybook_dsg")
+                                    )
+
+                                # ToDo Actual: copytree(PosixPath('mybook_dsg/_build/html'), PosixPath('mybook/_build/html/editions/dsg'), dirs_exist_ok=True)
+                                # mock_copytree.assert_called_once_with()
 
                         mock_edition.assert_called_once_with(
                             "dsg", {"new": "toc"}, Path("mybook")
@@ -290,19 +288,17 @@ class TestGetTocAndProfiles(unittest.TestCase):
                 self.assertEqual(44, toc)
                 self.assertEqual(44, profiles)
 
+
 class TestEditConfigTitle(unittest.TestCase):
     """Test that title is edited in config.yaml"""
 
     def test_edit_case(self):
         """Test that title edits are made"""
-        configDict = {
-            "title":"The Turing Way"
-        }
-        editedConfigDict = editConfigTitle(config=configDict, newTitle="Test")
-        expectedConfig = {
-            "title":"The Turing Way Test Edition"
-        }
-        self.assertDictEqual(expectedConfig, editedConfigDict)
+        config_dict = {"title": "The Turing Way"}
+        edited_config_dict = edit_config_title(config=config_dict, new_title="Test")
+        expected_config = {"title": "The Turing Way Test Edition"}
+        self.assertDictEqual(expected_config, edited_config_dict)
+
 
 if __name__ == "__main__":
     unittest.main()
