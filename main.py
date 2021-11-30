@@ -76,8 +76,8 @@ def build_all(book_path):
     run(["jupyter-book", "build", book_path], check=True)
 
     # Make the directory, if it doesn't already exist
-    pathways_path = book_path / "_build/html/pathway"
-    pathways_path.mkdir(parents=True, exist_ok=True)
+    pathway_dir = book_path / "_build/html/pathway"
+    pathway_dir.mkdir(parents=True, exist_ok=True)
 
     for profile_name, _ in profiles_and_tocs:
         new_path = book_path.parent / (book_path.name + "_" + profile_name)
@@ -85,7 +85,7 @@ def build_all(book_path):
 
         # Copy the built html to the pathway directory
         copytree(
-            new_path / "_build/html", pathways_path / profile_name, dirs_exist_ok=True
+            new_path / "_build/html", pathway_dir / profile_name, dirs_exist_ok=True
         )
 
         rmtree(new_path)
