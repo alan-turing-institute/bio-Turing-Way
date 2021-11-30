@@ -33,7 +33,7 @@ _The Turing Way_ project illustration by Scriberia. Zenodo. [http://doi.org/10.5
 :footer: text-left
 ​
 ​
-```{link-button} https://the-turing-way-customise.netlify.app/editions/dsg/welcome.html
+```{link-button} https://the-turing-way-choose-your-own-adventure.netlify.app/pathway/dsg/welcome.html
     :text: DSG
     :classes: bg-info text-white text-center font-weight-bold
 ```
@@ -46,7 +46,7 @@ _The Turing Way_ project illustration by Scriberia. Zenodo. [http://doi.org/10.5
 ​
 ---
 ​
-```{link-button} https://the-turing-way-customise.netlify.app/editions/enrichment/welcome.html
+```{link-button} https://the-turing-way-choose-your-own-adventure.netlify.app/pathway/enrichment/welcome.html
     :text: Enrichment
     :classes: bg-info text-white text-center font-weight-bold
 ```
@@ -60,7 +60,7 @@ _The Turing Way_ project illustration by Scriberia. Zenodo. [http://doi.org/10.5
 ​
 ---
 ​
-```{link-button} https://the-turing-way-customise.netlify.app/editions/group-leader/welcome.html
+```{link-button} https://the-turing-way-choose-your-own-adventure.netlify.app/pathway/group-leader/welcome.html
     :text: Group Leaders
     :classes: bg-info text-white text-center font-weight-bold
 ```
