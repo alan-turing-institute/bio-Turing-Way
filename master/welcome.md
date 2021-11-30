@@ -38,10 +38,11 @@ _The Turing Way_ project illustration by Scriberia. Zenodo. [http://doi.org/10.5
     :classes: bg-info text-white text-center font-weight-bold
 ```
 ^^^
-- [](/welcome)
-- [](/communication/communication)
-- [](/communication/comms-overview)
-- [](/communication/comms-overview/comms-overview-principles)
+
+- Welcome
+- Guide for Communication
+- Overview of the Guide for Communication
+- Principles of Communicating with Wider Audiences ​
 ​
 ---
 ​
@@ -51,11 +52,11 @@ _The Turing Way_ project illustration by Scriberia. Zenodo. [http://doi.org/10.5
 ```
 ^^^
 ​
-- [](/welcome)
-- [](reproducible-research/overview/overview-definitions)
-- [](reproducible-research/overview/overview-benefit)
-- [](reproducible-research/overview/overview-barriers)
-- [](reproducible-research/overview/overview-resources)
+- Welcome
+- Definitions
+- Added Advantages
+- Barriers to reproducibility
+- Resources ​
 ​
 ---
 ​
@@ -65,11 +66,11 @@ _The Turing Way_ project illustration by Scriberia. Zenodo. [http://doi.org/10.5
 ```
 ^^^
 ​
-- [](/welcome)
-- [](/project-design/pd-overview)
-- [](/project-design/pd-overview/pd-overview-planning)
-- [](/project-design/pd-overview/pd-overview-methods)
-- [](/project-design/pd-overview/pd-overview-version)
+- Welcome
+- Overview of Project Design
+- Planning for Project Design
+- Reproducibility Methods
+- Version Control and Documentation ​
 ​
 :::
 
