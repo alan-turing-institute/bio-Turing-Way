@@ -1,4 +1,4 @@
-"""Generate different editions of the book, as determined by profiles.yml."""
+"""Generate different pathways of the book, as determined by profiles.yml."""
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
@@ -30,7 +30,7 @@ def open_config(new_path: str):
 def edit_config_title(config: Dict, new_title: str):
     if "title" in config:
         old_title = config["title"]
-        config = {**config, "title": old_title + " " + new_title + " Edition"}
+        config = {**config, "title": old_title + " " + new_title + " Pathway"}
     return config
 
 
@@ -46,8 +46,8 @@ def customise_config(new_path: str, new_title: str):
     write_config(new_path=new_path, config_content=config)
 
 
-def build_edition(profile_name, new_toc, book_path):
-    """Copy book_path to make an edition called profile_name and containing new_toc."""
+def build_pathway(profile_name, new_toc, book_path):
+    """Copy book_path to make an pathway called profile_name and containing new_toc."""
 
     new_path = book_path.parent / (book_path.name + "_" + profile_name)
 
@@ -62,35 +62,35 @@ def build_edition(profile_name, new_toc, book_path):
 
 
 def build_all(book_path):
-    """Build the book and its other editions."""
+    """Build the book and its other pathways."""
 
-    # Clean the book_path/_build dir to remove previous _build/html/edition/ dirs
+    # Clean the book_path/_build dir to remove previous _build/html/pathway/ dirs
     run(["jupyter-book", "clean", book_path], check=True)
 
     toc, profiles = get_toc_and_profiles(book_path)
 
     profiles_and_tocs = list(generate_tocs(toc, profiles))
     for profile_name, new_toc in profiles_and_tocs:
-        build_edition(profile_name, new_toc, book_path)
+        build_pathway(profile_name, new_toc, book_path)
 
     run(["jupyter-book", "build", book_path], check=True)
 
     # Make the directory, if it doesn't already exist
-    editions_path = book_path / "_build/html/editions"
-    editions_path.mkdir(parents=True, exist_ok=True)
+    pathway_dir = book_path / "_build/html/pathway"
+    pathway_dir.mkdir(parents=True, exist_ok=True)
 
     for profile_name, _ in profiles_and_tocs:
         new_path = book_path.parent / (book_path.name + "_" + profile_name)
         run(["jupyter-book", "build", new_path], check=True)
 
-        # Copy the built html to the editions directory
+        # Copy the built html to the pathway directory
         copytree(
-            new_path / "_build/html", editions_path / profile_name, dirs_exist_ok=True
+            new_path / "_build/html", pathway_dir / profile_name, dirs_exist_ok=True
         )
 
         rmtree(new_path)
 
-    print("Finished editions html generation")
+    print("Finished pathways html generation")
 
 
 def main(args):
