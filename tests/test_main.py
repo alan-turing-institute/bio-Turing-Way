@@ -7,7 +7,7 @@ from yaml import Loader, load
 
 from main import (
     build_all,
-    build_edition,
+    build_pathway,
     edit_config_title,
     generate_tocs,
     get_toc_and_profiles,
@@ -203,13 +203,13 @@ class TestGenerateTocs(unittest.TestCase):
 class TestBuild(unittest.TestCase):
     """Test the build function from the main module."""
 
-    def test_build_edition(self):
+    def test_build_pathway(self):
         with mock.patch("main.copytree") as mock_copy:
             with mock.patch("main.customise_config") as mock_config:
                 with mock.patch("main.open") as mock_open:
                     with mock.patch("main.dump") as mock_dump:
 
-                        build_edition("dsg", {"new": "toc"}, Path("mybook"))
+                        build_pathway("dsg", {"new": "toc"}, Path("mybook"))
 
                         mock_dump.assert_called_once_with(
                             {"new": "toc"},
@@ -235,7 +235,7 @@ class TestBuild(unittest.TestCase):
                 with mock.patch("main.generate_tocs") as mock_generate:
                     mock_generate.return_value = [("dsg", {"new": "toc"})]
 
-                    with mock.patch("main.build_edition") as mock_edition:
+                    with mock.patch("main.build_pathway") as mock_edition:
                         with mock.patch("main.Path.mkdir") as mock_mkdir:
                             with mock.patch("main.copytree") as mock_copytree:
 
@@ -296,7 +296,7 @@ class TestEditConfigTitle(unittest.TestCase):
         """Test that title edits are made"""
         config_dict = {"title": "The Turing Way"}
         edited_config_dict = edit_config_title(config=config_dict, new_title="Test")
-        expected_config = {"title": "The Turing Way Test Edition"}
+        expected_config = {"title": "The Turing Way Test Pathway"}
         self.assertDictEqual(expected_config, edited_config_dict)
 
 
