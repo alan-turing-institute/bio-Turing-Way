@@ -25,19 +25,32 @@ alt: The Turing Way project is illustrated as a road or path with shops for diff
 _The Turing Way_ project illustration by Scriberia. Zenodo. [http://doi.org/10.5281/zenodo.3332807](http://doi.org/10.5281/zenodo.3332807)
 ```
 
+<<<<<<< HEAD
+=======
+
+## Different Editions
+
+>>>>>>> b87a42b (Progress in creating card panels from yaml files)
 :::{panels}
 :container: +full-width 
 :column: col-lg-6 px-2 py-2
 :header: text-center bg-white
 :card: text-left shadow
 :footer: text-left
+<<<<<<< HEAD
 ​
 ​
 ```{link-button} https://the-turing-way-choose-your-own-adventure.netlify.app/pathway/dsg/welcome.html
+=======
+
+
+```{link-button} https://example.com
+>>>>>>> b87a42b (Progress in creating card panels from yaml files)
     :text: DSG
     :classes: bg-info text-white text-center font-weight-bold
 ```
 ^^^
+<<<<<<< HEAD
 
 - Welcome
 - Guide for Communication
@@ -47,10 +60,21 @@ _The Turing Way_ project illustration by Scriberia. Zenodo. [http://doi.org/10.5
 ---
 ​
 ```{link-button} https://the-turing-way-choose-your-own-adventure.netlify.app/pathway/enrichment/welcome.html
+=======
+- [](/welcome)
+- [](/communication/communication)
+- [](/communication/comms-overview)
+- [](/communication/comms-overview/comms-overview-principles)
+
+---
+
+```{link-button} https://example.com
+>>>>>>> b87a42b (Progress in creating card panels from yaml files)
     :text: Enrichment
     :classes: bg-info text-white text-center font-weight-bold
 ```
 ^^^
+<<<<<<< HEAD
 ​
 - Welcome
 - Definitions
@@ -61,10 +85,23 @@ _The Turing Way_ project illustration by Scriberia. Zenodo. [http://doi.org/10.5
 ---
 ​
 ```{link-button} https://the-turing-way-choose-your-own-adventure.netlify.app/pathway/group-leader/welcome.html
+=======
+
+- [](/welcome)
+- [](reproducible-research/overview/overview-definitions)
+- [](reproducible-research/overview/overview-benefit)
+- [](reproducible-research/overview/overview-barriers)
+- [](reproducible-research/overview/overview-resources)
+
+---
+
+```{link-button} https://example.com
+>>>>>>> b87a42b (Progress in creating card panels from yaml files)
     :text: Group Leaders
     :classes: bg-info text-white text-center font-weight-bold
 ```
 ^^^
+<<<<<<< HEAD
 ​
 - Welcome
 - Overview of Project Design
@@ -74,6 +111,18 @@ _The Turing Way_ project illustration by Scriberia. Zenodo. [http://doi.org/10.5
 ​
 :::
 
+=======
+
+- [](/welcome)
+- [](/project-design/pd-overview)
+- [](/project-design/pd-overview/pd-overview-planning)
+- [](/project-design/pd-overview/pd-overview-methods)
+- [](/project-design/pd-overview/pd-overview-version)
+
+:::
+
+
+>>>>>>> b87a42b (Progress in creating card panels from yaml files)
 (welcome-community)=
 ## Our Community
 
