@@ -1,0 +1,12 @@
+# Generic Table of Contents for testing.
+# Learn more at https://jupyterbook.org/customize/toc.html
+format: jb-book
+root: intro
+parts:
+- chapters:
+  - file: setup
+    sections:
+    - title: Version Control with Git
+      file: version_control/git
+    - title: Open Data (best practice)
+      file: reproducible_research/open-data

@@ -1,0 +1,9 @@
+Enrichment:
+  - intro
+  - subfolder/mymarkdownfile
+  - markdown
+DSG:
+  - intro
+  - some/thing
+  - markdown
+

@@ -1,0 +1,10 @@
+format: jb-book
+root: intro
+parts:
+- chapters:
+  - file: markdown
+    sections:
+    - title: Overview
+      file: subfolder/mymarkdownfile
+    - title: Definitions
+      file: some/thing
