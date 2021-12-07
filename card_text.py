@@ -1,26 +1,25 @@
 import yaml
 from yaml import Loader, dump, load
 
-path_welcome_md = "master/welcomeTest.md"
-panel_string = "\nTEST TEST TEST \n"
+
 heading_title = "## Different Profiles"
 filelist = []
 
 
 # Main function: Read in TOC list and markdown path
-# def edit_welcome_md(path_welcome_md,toc_dict_list):
-
-
-    # Create cards
+def edit_welcome_md(path_welcome_md,toc_dict_list):
     
-    
+    # Create a list of all the filenames from every toc 
+    list_filelist = loop_dictionary_list(toc_dict_list)
 
-    # Create panel 
+    # Create a list of all the md titles from every toc
+    list_titlelist = get_titles_from_filenames(list_filelist)
 
+    # Create panel string using the toc titles
+    panel_string = create_panel(list_titlelist)
 
-
-    # Edit the markdown file
-    # insert_into_md(path_welcome_md,heading_title,panel_string)
+    # Insert panel into the welcome md file
+    insert_into_md(path_welcome_md,heading_title,panel_string)
 
 
 # Take the markdown file, add the panels, and save the markdown file. 
@@ -69,7 +68,8 @@ def loop_dictionary(toc_dictionary):
 # Create a list of strings of the filenames within the TOC
 def get_file_strings(item):
     if item[0] == 'file':
-        return filelist.append(item[1])
+        filelist.append(item[1])
+        return filelist
     elif item[0] in ['parts','chapters','sections']:
         for entry in item[1]:
             loop_dictionary(entry)
@@ -97,45 +97,87 @@ def loop_dictionary_list(toc_dict_list):
         list_filelist[counter] = filelist
     return list_filelist
         
-# For each item in each TOC, get the heading name
-
+# For each item in each TOC, get the heading name from the md file
 def get_titles_from_filenames(list_filelist):
     number_of_tocs = len(list_filelist)
     list_titlelist = [[] for i in range(number_of_tocs)]
     titlelist = []
     for counter,list_files in enumerate(list_filelist):
-        print(counter)
-        print("\n")
-        # Make sure the filelist is clear
+
+        # Make sure the title list is clear
         if titlelist:
             titlelist.clear()
 
+        # Loop through the files and get the headings
         for file in list_files:
             filepath = "master/" + file + ".md"
             md_text = get_text_from_md(filepath)
             md_title = get_heading(md_text, heading_string = "# ")
             titlelist.append(md_title.strip())
         
-        # new_titlelist = []
-        # for element in titlelist:
-        #     new_titlelist.append(element.strip())
         list_titlelist[counter] = titlelist
     return list_titlelist
-# # Testing area
 
+# From the list of titles for a single toc, create a bullet point string. 
+def create_bullet_string(titlelist):
+    toc_string = ""
+    for counter,title in enumerate(titlelist):
+        if counter >=2:
+            toc_string = toc_string + "- And more! \n"
+            break
+        toc_string = toc_string + "- " + title + "\n"
+    return toc_string
+
+# Create panel
+def create_panel(list_titlelist):
+    number_of_tocs = len(list_titlelist)
+
+    panel_start = """\n::::{panels}
+:container: +full-width 
+:column: col-lg-6 px-2 py-2
+:header: text-center bg-white
+:card: text-left shadow
+:footer: text-left\n"""
+
+    
+    panel_string = panel_start
+    panel_end = "\n::: \n"
+
+    for counter,toc_list in enumerate(list_titlelist):
+
+        button_string = create_profile_button("DSG","https://example.com")
+
+        toc_string = create_bullet_string(toc_list)            
+        panel_string = panel_string + button_string + toc_string
+        if counter != number_of_tocs-1:
+            panel_string = panel_string + "\n---\n"
+    panel_string = panel_string + panel_end
+    return panel_string
+
+ # Create the button linking to the profile
+def create_profile_button(profile_name,profile_url):
+    start_button = "\n```{link-button} "
+    text_button = "\n:text: "
+    option_button = """\n:classes: bg-info text-white text-center font-weight-bold
+```"""
+    end_card_header = "\n^^^\n"
+
+    button_string = start_button + profile_url
+    button_string = button_string + text_button + profile_name
+    button_string = button_string + option_button + end_card_header
+    return button_string
+
+
+# # Testing area
+path_welcome_md = "master/welcomeTest.md"
 example_toc =  load_toc_file('dsg/_toc.yml')
 toc_dict_list = [example_toc,example_toc,example_toc]
+edit_welcome_md(path_welcome_md,toc_dict_list)
 
-list_filelist = loop_dictionary_list(toc_dict_list)
-list_titlelist = get_titles_from_filenames(list_filelist)
-print('\n')
-print(list_titlelist)
-print('\n')
+# Broken things:
+# - Don't have the button titles 
+# - Don't have the button links 
+# - Don't have the toc links
+# - Limit the number of bullet points
 
-# print('\n')
-# print(list_titlelist)
-# print('\n')
-
-# md_text = get_text_from_md(path_welcome_md)
-# md_title = get_heading(md_text, heading_string = "# ")
 
