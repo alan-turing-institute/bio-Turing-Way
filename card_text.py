@@ -4,12 +4,11 @@ from yaml import Loader, dump, load
 path_welcome_md = "master/welcomeTest.md"
 panel_string = "\nTEST TEST TEST \n"
 heading_title = "## Different Profiles"
-toc_dict_list = []
 filelist = []
 
 
 # Main function: Read in TOC list and markdown path
-def edit_welcome_md(path_welcome_md,toc_dict_list):
+# def edit_welcome_md(path_welcome_md,toc_dict_list):
 
 
     # Create cards
@@ -21,7 +20,7 @@ def edit_welcome_md(path_welcome_md,toc_dict_list):
 
 
     # Edit the markdown file
-    insert_into_md(path_welcome_md,heading_title,panel_string)
+    # insert_into_md(path_welcome_md,heading_title,panel_string)
 
 
 # Take the markdown file, add the panels, and save the markdown file. 
@@ -74,6 +73,7 @@ def get_file_strings(item):
     elif item[0] in ['parts','chapters','sections']:
         for entry in item[1]:
             loop_dictionary(entry)
+    
 
 # Grab an example TOC dictionary
 def load_toc_file(toc_file_path):
@@ -84,21 +84,42 @@ def load_toc_file(toc_file_path):
 
 # Loop through the list of TOC dictionaries
 def loop_dictionary_list(toc_dict_list):
-    for toc_dict in toc_dict_list:
-        # Make sure the filelist is clear for each new TOC
+    number_of_tocs = len(toc_dict_list)
+
+    list_filelist = [[] for i in range(number_of_tocs)]
+
+    for counter,toc_dict in enumerate(toc_dict_list):
+        # Make sure the filelist is clear
         if filelist:
             filelist.clear()
+        # Loop through the given TOC and keep the filenames
         loop_dictionary(toc_dict)
+        # Add the filenames to a list of lists
+        list_filelist[counter] = filelist
+    return list_filelist
+        
+# For each item in each TOC, get the heading name
 
+def get_titles_from_filenames(list_filelist):
+    for list_files in list_filelist:
+        for file in list_files:
+            filepath = "master/" + file + ".md"
+            md_text = get_text_from_md(filepath)
+            md_title = get_heading(md_text, heading_string = "# ")
+            print('\n')
+            print(md_title)
 # # Testing area
 
 example_toc =  load_toc_file('dsg/_toc.yml')
 toc_dict_list = [example_toc,example_toc,example_toc]
 
-md_text = get_text_from_md(path_welcome_md)
-md_title = get_heading(md_text, heading_string = "# ")
+list_filelist = loop_dictionary_list(toc_dict_list)
+get_titles_from_filenames(list_filelist)
 
+# print('\n')
+# print(list_filelist)
+# print('\n')
 
-print('\n')
-print(md_title)
-print('\n')
+# md_text = get_text_from_md(path_welcome_md)
+# md_title = get_heading(md_text, heading_string = "# ")
+
