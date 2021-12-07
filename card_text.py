@@ -85,7 +85,6 @@ def load_toc_file(toc_file_path):
 # Loop through the list of TOC dictionaries
 def loop_dictionary_list(toc_dict_list):
     number_of_tocs = len(toc_dict_list)
-
     list_filelist = [[] for i in range(number_of_tocs)]
 
     for counter,toc_dict in enumerate(toc_dict_list):
@@ -101,23 +100,40 @@ def loop_dictionary_list(toc_dict_list):
 # For each item in each TOC, get the heading name
 
 def get_titles_from_filenames(list_filelist):
-    for list_files in list_filelist:
+    number_of_tocs = len(list_filelist)
+    list_titlelist = [[] for i in range(number_of_tocs)]
+    titlelist = []
+    for counter,list_files in enumerate(list_filelist):
+        print(counter)
+        print("\n")
+        # Make sure the filelist is clear
+        if titlelist:
+            titlelist.clear()
+
         for file in list_files:
             filepath = "master/" + file + ".md"
             md_text = get_text_from_md(filepath)
             md_title = get_heading(md_text, heading_string = "# ")
-            print('\n')
-            print(md_title)
+            titlelist.append(md_title.strip())
+        
+        # new_titlelist = []
+        # for element in titlelist:
+        #     new_titlelist.append(element.strip())
+        list_titlelist[counter] = titlelist
+    return list_titlelist
 # # Testing area
 
 example_toc =  load_toc_file('dsg/_toc.yml')
 toc_dict_list = [example_toc,example_toc,example_toc]
 
 list_filelist = loop_dictionary_list(toc_dict_list)
-get_titles_from_filenames(list_filelist)
+list_titlelist = get_titles_from_filenames(list_filelist)
+print('\n')
+print(list_titlelist)
+print('\n')
 
 # print('\n')
-# print(list_filelist)
+# print(list_titlelist)
 # print('\n')
 
 # md_text = get_text_from_md(path_welcome_md)
