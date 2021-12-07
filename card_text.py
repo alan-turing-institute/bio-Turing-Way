@@ -1,22 +1,70 @@
 import yaml
 from yaml import Loader, dump, load
 
+path_welcome_md = "master/welcomeTest.md"
+panel_string = "\nTEST TEST TEST \n"
+heading_title = "## Different Profiles"
+toc_dict_list = []
+filelist = []
 
 
-# Loading the yaml file. 
-def load_toc_file(toc_file_path):
-    with open(toc_file_path) as t:
-        toc_dictionary = load(t, Loader=Loader)
-        loop_dictionary(toc_dictionary)
-    return toc_dictionary
+# Main function: Read in TOC list and markdown path
+def edit_welcome_md(path_welcome_md,toc_dict_list):
 
-# Loop through the yaml file to get the filenames from throughout the tree
+
+    # Create cards
+    
+    
+
+    # Create panel 
+
+
+
+    # Edit the markdown file
+    insert_into_md(path_welcome_md,heading_title,panel_string)
+
+
+# Take the markdown file, add the panels, and save the markdown file. 
+def insert_into_md(path_welcome_md,heading_title,panel_string):
+
+    md_text = get_text_from_md(path_welcome_md)
+    new_md_text = insert_text_after_string(md_text,heading_title, panel_string) 
+    overwrite_md(new_md_text,path_welcome_md)
+   
+# Get the text from the markdown file
+def get_text_from_md(path_welcome_md):
+    with open(path_welcome_md, 'r') as md:
+        md_text = md.readlines()
+    return(md_text)
+
+# Look for a heading and insert string after that heading
+def insert_text_after_string(md_text,heading_title, panel_string):
+    new_md_text = ""
+    for line in md_text:
+        if line.startswith(heading_title):
+            new_md_text += line + panel_string
+        else:
+            new_md_text += line
+    return(new_md_text)
+
+# Overwrite the markdown file with new added panel text. 
+def overwrite_md(new_md_text,path_welcome_md):
+     with open(path_welcome_md, 'w') as txt:
+        txt.write(new_md_text)
+
+# Grab the top-most heading from a markdown file
+def get_heading(md_text, heading_string = "# "):
+    new_md_text = ""
+    for line in md_text:
+        if line.startswith(heading_string):
+            md_title_string += line
+            break
+    return(md_title_string)
+
+# Loop through the dictionary TOC and get the filename from throughout the tree
 def loop_dictionary(toc_dictionary):
-    if type(toc_dictionary) == dict:
-        for item in toc_dictionary.items():
+    for item in toc_dictionary.items():
             get_file_strings(item)
-    else:
-        raise Exception('Not a dictionary')
 
 # Create a list of strings of the filenames within the TOC
 def get_file_strings(item):
@@ -25,74 +73,28 @@ def get_file_strings(item):
     elif item[0] in ['parts','chapters','sections']:
         for entry in item[1]:
             loop_dictionary(entry)
-            
-# Get titles from markdown files
-def get_title(filelist):
-    title_list = []
 
-    for filedir in filelist:
-        with open(filedir) as t:
-            print(t[0])
-    return title_list
+# Grab an example TOC dictionary
+def load_toc_file(toc_file_path):
+    with open(toc_file_path) as t:
+        toc_dictionary = load(t, Loader=Loader)
+        loop_dictionary(toc_dictionary)
+    return toc_dictionary
 
-# Create the button for the link to the edition
-def create_edition_button(edition_title):
+# Loop through the list of TOC dictionaries
+def loop_dictionary_list(toc_dict_list):
+    for toc_dict in toc_dict_list:
+        # Make sure the filelist is clear for each new TOC
+        if filelist:
+            filelist.clear()
+        loop_dictionary(toc_dict)
 
-    edition_url = "https://the-turing-way-choose-your-own-adventure.netlify.app/pathway/"
-    button_url = edition_url + edition_title
-    
-    button_start = "```{link-button} " + button_url + "\n"
-    button_text = ":text: " + edition_title + "\n"
-    button_option = ":classes: bg-info text-white text-center font-weight-bold \n"
-    button_end = "```"
-    edition_button = button_start + button_text + button_option + button_end
-    return edition_button
+# # Testing area
 
-# Loop through each item of the table of contents to create bullet points
-def create_toc_bullets(filename_list):
-    toc_string = "\n"
-
-    for filename in filename_list:
-        filename = "[](" + filename + ")"
-        toc_string = toc_string + "- " + filename + "\n"
-
-    return toc_string
-
-# Creating bullet points with hyperlinks to the different pages
-def create_card_with_toc(edition_title,filename_list):
-    
-    title_end_string = "\n ^^^ "
-    card_ending_string = "\n --- \n"
-    
-    edition_button = create_edition_button(edition_title)
-
-    toc_string = create_toc_bullets(filename_list)
-    card_string = edition_button + title_end_string + toc_string + card_ending_string
-    return card_string
-
-def create_panels(edition_title,filename_list):
-    panel_start = """:::{panels}
-    :container: +full-width text-center
-    :column: col-lg-6 px-2 py-2
-    :card: \n"""
-
-    card_string = create_card_with_toc(edition_title,filename_list)
-
-    panel_end = "\n::: \n"
-
-    panel_string = panel_start + card_string + panel_end 
-    return panel_string
-
-filelist = []
-titlelist = []
-toc_file_path = 'dsg/_toc.yml'
-edition_title = 'dsg'
-
-toc_dictionary = load_toc_file(toc_file_path)
-
-panel_string = create_panels(edition_title, filelist)   
-
+example_toc =  load_toc_file('dsg/_toc.yml')
+toc_dict_list = [example_toc,example_toc,example_toc]
 
 print('\n')
-print(titlelist)
-print('\n')
+    print('\n')
+    print(filelist)
+    print('\n')
