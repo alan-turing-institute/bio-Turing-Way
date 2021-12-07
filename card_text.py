@@ -7,73 +7,79 @@ filelist = []
 
 
 # Main function: Read in TOC list and markdown path
-def edit_welcome_md(path_welcome_md,toc_dict_list):
-    
-    # Create a list of all the filenames from every toc 
+def edit_welcome_md(path_welcome_md, toc_dict_list, profiles_list):
+
+    # Create a list of all the filenames from every toc
     list_filelist = loop_dictionary_list(toc_dict_list)
 
     # Create a list of all the md titles from every toc
     list_titlelist = get_titles_from_filenames(list_filelist)
 
     # Create panel string using the toc titles
-    panel_string = create_panel(list_titlelist)
+    panel_string = create_panel(list_titlelist, profiles_list)
 
     # Insert panel into the welcome md file
-    insert_into_md(path_welcome_md,heading_title,panel_string)
+    insert_into_md(path_welcome_md, heading_title, panel_string)
 
 
-# Take the markdown file, add the panels, and save the markdown file. 
-def insert_into_md(path_welcome_md,heading_title,panel_string):
+# Take the markdown file, add the panels, and save the markdown file.
+def insert_into_md(path_welcome_md, heading_title, panel_string):
 
     md_text = get_text_from_md(path_welcome_md)
-    new_md_text = insert_text_after_string(md_text,heading_title, panel_string) 
-    overwrite_md(new_md_text,path_welcome_md)
-   
+    new_md_text = insert_text_after_string(md_text, heading_title, panel_string)
+    overwrite_md(new_md_text, path_welcome_md)
+
+
 # Get the text from the markdown file
 def get_text_from_md(path_welcome_md):
-    with open(path_welcome_md, 'r') as md:
+    with open(path_welcome_md, "r") as md:
         md_text = md.readlines()
-    return(md_text)
+    return md_text
+
 
 # Look for a heading and insert string after that heading
-def insert_text_after_string(md_text,heading_title, panel_string):
+def insert_text_after_string(md_text, heading_title, panel_string):
     new_md_text = ""
     for line in md_text:
         if line.startswith(heading_title):
             new_md_text += line + panel_string
         else:
             new_md_text += line
-    return(new_md_text)
+    return new_md_text
 
-# Overwrite the markdown file with new added panel text. 
-def overwrite_md(new_md_text,path_welcome_md):
-     with open(path_welcome_md, 'w') as txt:
+
+# Overwrite the markdown file with new added panel text.
+def overwrite_md(new_md_text, path_welcome_md):
+    with open(path_welcome_md, "w") as txt:
         txt.write(new_md_text)
 
+
 # Grab the top-most heading from a markdown file
-def get_heading(md_text, heading_string = "# "):
+def get_heading(md_text, heading_string="# "):
     md_title_string = ""
     for line in md_text:
         if line.startswith(heading_string):
             md_title_string += line
             break
-    md_title = md_title_string.replace(heading_string,"")
-    return(md_title)
+    md_title = md_title_string.replace(heading_string, "")
+    return md_title
+
 
 # Loop through the dictionary TOC and get the filename from throughout the tree
 def loop_dictionary(toc_dictionary):
     for item in toc_dictionary.items():
-            get_file_strings(item)
+        get_file_strings(item)
+
 
 # Create a list of strings of the filenames within the TOC
 def get_file_strings(item):
-    if item[0] == 'file':
+    if item[0] == "file":
         filelist.append(item[1])
         return filelist
-    elif item[0] in ['parts','chapters','sections']:
+    elif item[0] in ["parts", "chapters", "sections"]:
         for entry in item[1]:
             loop_dictionary(entry)
-    
+
 
 # Grab an example TOC dictionary
 def load_toc_file(toc_file_path):
@@ -82,12 +88,13 @@ def load_toc_file(toc_file_path):
         loop_dictionary(toc_dictionary)
     return toc_dictionary
 
+
 # Loop through the list of TOC dictionaries
 def loop_dictionary_list(toc_dict_list):
     number_of_tocs = len(toc_dict_list)
     list_filelist = [[] for i in range(number_of_tocs)]
 
-    for counter,toc_dict in enumerate(toc_dict_list):
+    for counter, toc_dict in enumerate(toc_dict_list):
         # Make sure the filelist is clear
         if filelist:
             filelist.clear()
@@ -96,13 +103,14 @@ def loop_dictionary_list(toc_dict_list):
         # Add the filenames to a list of lists
         list_filelist[counter] = filelist
     return list_filelist
-        
+
+
 # For each item in each TOC, get the heading name from the md file
 def get_titles_from_filenames(list_filelist):
     number_of_tocs = len(list_filelist)
     list_titlelist = [[] for i in range(number_of_tocs)]
     titlelist = []
-    for counter,list_files in enumerate(list_filelist):
+    for counter, list_files in enumerate(list_filelist):
 
         # Make sure the title list is clear
         if titlelist:
@@ -112,24 +120,26 @@ def get_titles_from_filenames(list_filelist):
         for file in list_files:
             filepath = "master/" + file + ".md"
             md_text = get_text_from_md(filepath)
-            md_title = get_heading(md_text, heading_string = "# ")
+            md_title = get_heading(md_text, heading_string="# ")
             titlelist.append(md_title.strip())
-        
+
         list_titlelist[counter] = titlelist
     return list_titlelist
 
-# From the list of titles for a single toc, create a bullet point string. 
+
+# From the list of titles for a single toc, create a bullet point string.
 def create_bullet_string(titlelist):
     toc_string = ""
-    for counter,title in enumerate(titlelist):
-        if counter >=2:
+    for counter, title in enumerate(titlelist):
+        if counter >= 2:
             toc_string = toc_string + "- And more! \n"
             break
         toc_string = toc_string + "- " + title + "\n"
     return toc_string
 
+
 # Create panel
-def create_panel(list_titlelist):
+def create_panel(list_titlelist,profile_list):
     number_of_tocs = len(list_titlelist)
 
     panel_start = """\n::::{panels}
@@ -139,23 +149,23 @@ def create_panel(list_titlelist):
 :card: text-left shadow
 :footer: text-left\n"""
 
-    
     panel_string = panel_start
     panel_end = "\n::: \n"
 
-    for counter,toc_list in enumerate(list_titlelist):
+    for counter, toc_list in enumerate(list_titlelist):
 
-        button_string = create_profile_button("DSG","https://example.com")
+        button_string = create_profile_button(profile_list[counter], "https://example.com")
 
-        toc_string = create_bullet_string(toc_list)            
+        toc_string = create_bullet_string(toc_list)
         panel_string = panel_string + button_string + toc_string
-        if counter != number_of_tocs-1:
+        if counter != number_of_tocs - 1:
             panel_string = panel_string + "\n---\n"
     panel_string = panel_string + panel_end
     return panel_string
 
- # Create the button linking to the profile
-def create_profile_button(profile_name,profile_url):
+
+# Create the button linking to the profile
+def create_profile_button(profile_name, profile_url):
     start_button = "\n```{link-button} "
     text_button = "\n:text: "
     option_button = """\n:classes: bg-info text-white text-center font-weight-bold
@@ -168,16 +178,51 @@ def create_profile_button(profile_name,profile_url):
     return button_string
 
 
+def add_cards(profile_list, toc_dict_list):
+    """Takes a list of profile names and a list of tocs. Creates and inserts cards."""
+
+    path_welcome_md = "master/welcomeTest.md"
+    edit_welcome_md(path_welcome_md, toc_dict_list, profile_list)
+
+
+add_cards(
+    ["mynewprofile"],
+    [
+        {
+            "parts": [
+                {
+                    "chapters": [
+                        {
+                            "file": "communication/communication",
+                            "sections": [
+                                {
+                                    "file": "communication/comms-overview",
+                                    "sections": [
+                                        {
+                                            "file": "communication/comms-overview/comms-overview-principles",
+                                            "title": "Principles of Communicating with Wider Audiences",
+                                        }
+                                    ],
+                                    "title": "Overview of Guide for Communication",
+                                }
+                            ],
+                        }
+                    ]
+                }
+            ],
+            "format": "jb-book",
+            "root": "welcome",
+        }
+    ],
+)
+
 # # Testing area
-path_welcome_md = "master/welcomeTest.md"
-example_toc =  load_toc_file('dsg/_toc.yml')
-toc_dict_list = [example_toc,example_toc,example_toc]
-edit_welcome_md(path_welcome_md,toc_dict_list)
+# example_toc =  load_toc_file('dsg/_toc.yml')
+# toc_dict_list = [example_toc,example_toc,example_toc]
+# edit_welcome_md(path_welcome_md,toc_dict_list)
 
 # Broken things:
-# - Don't have the button titles 
-# - Don't have the button links 
+# - Don't have the button titles
+# - Don't have the button links
 # - Don't have the toc links
 # - Limit the number of bullet points
-
-
