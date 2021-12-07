@@ -15,8 +15,10 @@ def edit_welcome_md(path_welcome_md, toc_dict_list, profiles_list):
     # Create a list of all the md titles from every toc
     list_titlelist = get_titles_from_filenames(list_filelist)
 
+    # ToDo Add some debugging print statements (or get the VSCode debugger to work)
+    
     # Create panel string using the toc titles
-    panel_string = create_panel(list_titlelist, profiles_list)
+    panel_string = create_panel(list_titlelist, list_filelist, profiles_list)
 
     # Insert panel into the welcome md file
     insert_into_md(path_welcome_md, heading_title, panel_string)
@@ -128,18 +130,19 @@ def get_titles_from_filenames(list_filelist):
 
 
 # From the list of titles for a single toc, create a bullet point string.
-def create_bullet_string(titlelist):
+def create_bullet_string(titlelist,file_list):
     toc_string = ""
     for counter, title in enumerate(titlelist):
-        if counter >= 2:
+        if counter >= 3:
             toc_string = toc_string + "- And more! \n"
             break
-        toc_string = toc_string + "- " + title + "\n"
+        # If we create "editions", these may need to be <a href=''> type links
+        toc_string = toc_string + "- [" + title +"](" + file_list[counter] + ")\n"
     return toc_string
 
 
 # Create panel
-def create_panel(list_titlelist,profile_list):
+def create_panel(list_titlelist, list_filelist, profile_list):
     number_of_tocs = len(list_titlelist)
 
     panel_start = """\n::::{panels}
@@ -154,9 +157,9 @@ def create_panel(list_titlelist,profile_list):
 
     for counter, toc_list in enumerate(list_titlelist):
 
-        button_string = create_profile_button(profile_list[counter], "https://example.com")
-
-        toc_string = create_bullet_string(toc_list)
+        button_string = create_profile_button(profile_list[counter])
+        file_list = list_filelist[counter]
+        toc_string = create_bullet_string(toc_list,file_list)
         panel_string = panel_string + button_string + toc_string
         if counter != number_of_tocs - 1:
             panel_string = panel_string + "\n---\n"
@@ -165,56 +168,26 @@ def create_panel(list_titlelist,profile_list):
 
 
 # Create the button linking to the profile
-def create_profile_button(profile_name, profile_url):
+def create_profile_button(profile_name):
+    # ToDo Change this to either a relative path or, at least, the real Turing Way URL
+    profile_url = "https://the-turing-way-choose-your-own-adventure.netlify.app/editions/"
     start_button = "\n```{link-button} "
     text_button = "\n:text: "
     option_button = """\n:classes: bg-info text-white text-center font-weight-bold
 ```"""
     end_card_header = "\n^^^\n"
 
-    button_string = start_button + profile_url
+    button_string = start_button + profile_url + profile_name
     button_string = button_string + text_button + profile_name
     button_string = button_string + option_button + end_card_header
     return button_string
 
 
-def add_cards(profile_list, toc_dict_list):
+def add_cards(profile_list, toc_dict_list, welcome_path):
     """Takes a list of profile names and a list of tocs. Creates and inserts cards."""
 
-    path_welcome_md = "master/welcomeTest.md"
-    edit_welcome_md(path_welcome_md, toc_dict_list, profile_list)
+    edit_welcome_md(welcome_path, toc_dict_list, profile_list)
 
-
-add_cards(
-    ["mynewprofile"],
-    [
-        {
-            "parts": [
-                {
-                    "chapters": [
-                        {
-                            "file": "communication/communication",
-                            "sections": [
-                                {
-                                    "file": "communication/comms-overview",
-                                    "sections": [
-                                        {
-                                            "file": "communication/comms-overview/comms-overview-principles",
-                                            "title": "Principles of Communicating with Wider Audiences",
-                                        }
-                                    ],
-                                    "title": "Overview of Guide for Communication",
-                                }
-                            ],
-                        }
-                    ]
-                }
-            ],
-            "format": "jb-book",
-            "root": "welcome",
-        }
-    ],
-)
 
 # # Testing area
 # example_toc =  load_toc_file('dsg/_toc.yml')
@@ -222,7 +195,7 @@ add_cards(
 # edit_welcome_md(path_welcome_md,toc_dict_list)
 
 # Broken things:
-# - Don't have the button titles
-# - Don't have the button links
+# - Don't have the button titles DONE
+# - Don't have the button links DONE
 # - Don't have the toc links
-# - Limit the number of bullet points
+# - Limit the number of bullet points DONE

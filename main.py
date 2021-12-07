@@ -7,6 +7,8 @@ from yaml import Loader, load
 
 from badge import generate_badge, insert_badges
 
+from card_text import add_cards
+
 
 def get_toc_and_profiles(book_path):
     """Get the contents of _toc.yml and profiles.yml."""
