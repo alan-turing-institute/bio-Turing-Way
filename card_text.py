@@ -54,12 +54,13 @@ def overwrite_md(new_md_text,path_welcome_md):
 
 # Grab the top-most heading from a markdown file
 def get_heading(md_text, heading_string = "# "):
-    new_md_text = ""
+    md_title_string = ""
     for line in md_text:
         if line.startswith(heading_string):
             md_title_string += line
             break
-    return(md_title_string)
+    md_title = md_title_string.replace(heading_string,"")
+    return(md_title)
 
 # Loop through the dictionary TOC and get the filename from throughout the tree
 def loop_dictionary(toc_dictionary):
@@ -94,7 +95,10 @@ def loop_dictionary_list(toc_dict_list):
 example_toc =  load_toc_file('dsg/_toc.yml')
 toc_dict_list = [example_toc,example_toc,example_toc]
 
+md_text = get_text_from_md(path_welcome_md)
+md_title = get_heading(md_text, heading_string = "# ")
+
+
 print('\n')
-    print('\n')
-    print(filelist)
-    print('\n')
+print(md_title)
+print('\n')
