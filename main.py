@@ -61,36 +61,33 @@ def build_pathway(profile_name, new_toc, book_path):
         dump(new_toc, f)
 
 
-def build_all(book_path):
-    """Build the book and its other pathways."""
-
-    # Clean the book_path/_build dir to remove previous _build/html/pathway/ dirs
-    run(["jupyter-book", "clean", book_path], check=True)
+def pathways(book_path):
+    """Add extra pathways to the book."""
 
     toc, profiles = get_toc_and_profiles(book_path)
 
+    landing_pages = []
+    badges = []
+    cards = []
+
     profiles_and_tocs = list(generate_tocs(toc, profiles))
     for profile_name, new_toc in profiles_and_tocs:
-        build_pathway(profile_name, new_toc, book_path)
+        cards.append(generate_cards(profile_name, new_toc))
 
-    run(["jupyter-book", "build", book_path], check=True)
+        badges.append(generate_badges(profile_name, new_toc))
 
-    # Make the directory, if it doesn't already exist
-    pathway_dir = book_path / "_build/html/pathway"
-    pathway_dir.mkdir(parents=True, exist_ok=True)
+        landing_pages.append(generate_landing_pages(profile_name, new_toc))
 
-    for profile_name, _ in profiles_and_tocs:
-        new_path = book_path.parent / (book_path.name + "_" + profile_name)
-        run(["jupyter-book", "build", new_path], check=True)
+    # Now that we have generated the new contents, copy the book before mutating
+    # ToDo Copy mybook/ to e.g. mybook_copy/
 
-        # Copy the built html to the pathway directory
-        copytree(
-            new_path / "_build/html", pathway_dir / profile_name, dirs_exist_ok=True
-        )
+    insert_cards("path/to/welcome.md", cards)
+    create_landing_pages("/path/to/book", landing_pages)
+    insert_badges("path/to/book", badges)
 
-        rmtree(new_path)
+    # ToDo Shall we call `jupyter-book build mybook_copy/` here?
 
-    print("Finished pathways html generation")
+    print("Finished adding pathways.")
 
 
 def main(args):
@@ -100,11 +97,11 @@ def main(args):
     parser = ArgumentParser(description="Build a Jupyter Book.")
     subparsers = parser.add_subparsers()
 
-    build_subparser = subparsers.add_parser("build")
+    build_subparser = subparsers.add_parser("pathways")
     build_subparser.add_argument(
         "book_path", type=Path, help="the path to the root of your Jupyter Book"
     )
-    build_subparser.set_defaults(func=build_all)
+    build_subparser.set_defaults(func=pathways)
 
     # Call the sub-parser's function with the other arguments
     arguments = parser.parse_args(args)
