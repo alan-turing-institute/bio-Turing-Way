@@ -5,7 +5,7 @@ from pathlib import Path
 
 from yaml import Loader, load
 
-from badge import generate_badge
+from badge import generate_badge, insert_badges
 
 
 def get_toc_and_profiles(book_path):
@@ -38,41 +38,40 @@ def insert_cards(welcome_path, cards):
     print("insert_cards not implemented!")
 
 
-def create_landing_pages(book_path, landing_pages):
+def create_landing_pages(book_path, landing_pages, profile_names):
+    del profile_names
     del book_path
     del landing_pages
     print("create_landing_pages not implemented!")
 
 
-def insert_badges(book_path, badges):
-    del book_path
-    del badges
-    print("insert_badges not implemented!")
-
-
 def pathways(book_path):
     """Add extra pathways to the book."""
 
+    # The contents of _toc.yml and profiles.yml contents
     toc, profiles = get_toc_and_profiles(book_path)
 
     landing_pages = []
     badges = []
     cards = []
 
-    profiles_and_tocs = list(generate_tocs(toc, profiles))
-    for profile_name, new_toc in profiles_and_tocs:
-        cards.append(generate_card(profile_name, new_toc))
+    for profile in profiles:
+        new_toc = generate_toc(toc, profile)
+        cards.append(generate_card(profile["name"], new_toc))
 
-        badges.append(generate_badge(profile_name, new_toc))
+        badges.append(generate_badge(profile["name"], profile["colour"]))
 
-        landing_pages.append(generate_landing_page(profile_name, new_toc))
+        landing_pages.append(generate_landing_page(profile["name"], new_toc))
 
     # Now that we have generated the new contents, copy the book before mutating
     # ToDo Copy mybook/ to e.g. mybook_copy/
 
     insert_cards("path/to/welcome.md", cards)
-    create_landing_pages("/path/to/book", landing_pages)
-    insert_badges("path/to/book", badges)
+
+    profile_names = [profile["name"] for profile in profiles]
+    create_landing_pages("/path/to/book", landing_pages, profile_names)
+
+    insert_badges("path/to/book", badges, profiles)
 
     # ToDo Shall we call `jupyter-book build mybook_copy/` here?
 
@@ -155,11 +154,10 @@ def mask_toc(toc, whitelist):
     return masked_toc[0]
 
 
-def generate_tocs(toc, profiles):
+def generate_toc(toc, profile):
     """Generate a new ToC for each profile."""
 
-    for profile_name, whitelist in profiles.items():
-        yield profile_name, mask_toc(toc, whitelist)
+    return mask_toc(toc, profile["files"])
 
 
 if __name__ == "__main__":

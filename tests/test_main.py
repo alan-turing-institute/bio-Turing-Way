@@ -5,14 +5,7 @@ from unittest import mock
 
 from yaml import Loader, load
 
-from main import (
-    build_pathway,
-    generate_tocs,
-    get_toc_and_profiles,
-    main,
-    mask_parts,
-    mask_toc,
-)
+from main import generate_tocs, get_toc_and_profiles, main, mask_parts, mask_toc
 
 
 class TestMain(unittest.TestCase):

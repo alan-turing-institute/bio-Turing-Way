@@ -18,7 +18,29 @@ def extract_files(toc):
     return extract_recursive([toc])
 
 
-def generate_badge(profile_name, toc):
+def generate_badge(profile_name, colour):
     """Return some badge markdown and a list of files to insert it into."""
-    del profile_name
-    del toc
+
+    url = generate_shields_link(profile_name, colour)
+    landing_page = profile_name + ".md"
+    markdown = f"[![]({url})]({landing_page})"
+    return markdown
+
+
+def generate_shields_link(profile_name, colour):
+    """Generate a https://shields.io/ URL for this profile."""
+
+    url = (
+        "https://img.shields.io/static/v1"
+        "?label=pathway"
+        f"&message={profile_name}"
+        f"&color={colour}"
+    )
+    return url
+
+
+def insert_badges(book_path, badges, profiles):
+    del profiles
+    del book_path
+    del badges
+    print("insert_badges not implemented!")

@@ -144,6 +144,7 @@ disable=abstract-method,
         using-cmp-argument,
         xrange-builtin,
         zip-builtin-not-iterating,
+        use-dict-literal,
 
 
 [REPORTS]
