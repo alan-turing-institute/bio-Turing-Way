@@ -66,12 +66,12 @@ def pathways(book_path):
     # Now that we have generated the new contents, copy the book before mutating
     # ToDo Copy mybook/ to e.g. mybook_copy/
 
-    insert_cards("path/to/welcome.md", cards)
+    insert_cards(book_path / "welcome.md", cards)
 
     profile_names = [profile["name"] for profile in profiles]
-    create_landing_pages("/path/to/book", landing_pages, profile_names)
+    create_landing_pages(book_path, landing_pages, profile_names)
 
-    insert_badges("path/to/book", badges, profiles)
+    insert_badges(book_path, badges, profiles)
 
     # ToDo Shall we call `jupyter-book build mybook_copy/` here?
 
