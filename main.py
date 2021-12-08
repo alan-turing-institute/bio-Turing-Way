@@ -2,63 +2,52 @@
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
-from shutil import copytree, rmtree
-from subprocess import run
-from typing import Dict
 
-from yaml import Loader, dump, load
+from yaml import Loader, load
+
+from badge import generate_badge
 
 
 def get_toc_and_profiles(book_path):
     """Get the contents of _toc.yml and profiles.yml."""
 
-    with open(book_path / "_toc.yml") as f:
+    with open(book_path / "_toc.yml", encoding="utf-8") as f:
         toc = load(f, Loader=Loader)
 
-    with open(book_path / "profiles.yml") as f:
+    with open(book_path / "profiles.yml", encoding="utf-8") as f:
         profiles = load(f, Loader=Loader)
 
     return toc, profiles
 
 
-def open_config(new_path: str):
-    with open(new_path / "_config.yml") as f:
-        config = load(f, Loader=Loader)
-    return config
+def generate_card(profile, toc):
+    del profile
+    del toc
+    print("generate_card not implemented!")
 
 
-def edit_config_title(config: Dict, new_title: str):
-    if "title" in config:
-        old_title = config["title"]
-        config = {**config, "title": old_title + " " + new_title + " Pathway"}
-    return config
+def generate_landing_page(profile, toc):
+    del profile
+    del toc
+    print("generate_landing_page not implemented!")
 
 
-def write_config(new_path: str, config_content: Dict):
-    with open(new_path / "_config.yml", "w") as f:
-        # Overwrite the _config.yml
-        dump(config_content, f)
+def insert_cards(welcome_path, cards):
+    del welcome_path
+    del cards
+    print("insert_cards not implemented!")
 
 
-def customise_config(new_path: str, new_title: str):
-    config = open_config(new_path=new_path)
-    config = edit_config_title(config=config, new_title=new_title)
-    write_config(new_path=new_path, config_content=config)
+def create_landing_pages(book_path, landing_pages):
+    del book_path
+    del landing_pages
+    print("create_landing_pages not implemented!")
 
 
-def build_pathway(profile_name, new_toc, book_path):
-    """Copy book_path to make an pathway called profile_name and containing new_toc."""
-
-    new_path = book_path.parent / (book_path.name + "_" + profile_name)
-
-    copytree(book_path, new_path, dirs_exist_ok=True)
-
-    # Customise config title
-    customise_config(new_path=new_path, new_title=profile_name)
-
-    with open(new_path / "_toc.yml", "w") as f:
-        # Overwrite the _toc.yml
-        dump(new_toc, f)
+def insert_badges(book_path, badges):
+    del book_path
+    del badges
+    print("insert_badges not implemented!")
 
 
 def pathways(book_path):
@@ -72,11 +61,11 @@ def pathways(book_path):
 
     profiles_and_tocs = list(generate_tocs(toc, profiles))
     for profile_name, new_toc in profiles_and_tocs:
-        cards.append(generate_cards(profile_name, new_toc))
+        cards.append(generate_card(profile_name, new_toc))
 
-        badges.append(generate_badges(profile_name, new_toc))
+        badges.append(generate_badge(profile_name, new_toc))
 
-        landing_pages.append(generate_landing_pages(profile_name, new_toc))
+        landing_pages.append(generate_landing_page(profile_name, new_toc))
 
     # Now that we have generated the new contents, copy the book before mutating
     # ToDo Copy mybook/ to e.g. mybook_copy/
