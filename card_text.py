@@ -170,14 +170,14 @@ def create_panel(list_titlelist, list_filelist, profile_list):
 # Create the button linking to the profile
 def create_profile_button(profile_name):
     # ToDo Change this to either a relative path or, at least, the real Turing Way URL
-    profile_url = "https://the-turing-way-choose-your-own-adventure.netlify.app/editions/"
+    relative_path = "/" + profile_name + ".md"
     start_button = "\n```{link-button} "
     text_button = "\n:text: "
     option_button = """\n:classes: bg-info text-white text-center font-weight-bold
 ```"""
     end_card_header = "\n^^^\n"
 
-    button_string = start_button + profile_url + profile_name
+    button_string = start_button + relative_path
     button_string = button_string + text_button + profile_name
     button_string = button_string + option_button + end_card_header
     return button_string
