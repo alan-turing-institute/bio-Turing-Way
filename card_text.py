@@ -145,7 +145,7 @@ def create_bullet_string(titlelist,file_list):
 def create_panel(list_titlelist, list_filelist, profile_list):
     number_of_tocs = len(list_titlelist)
 
-    panel_start = """\n::::{panels}
+    panel_start = """\n:::{panels}
 :container: +full-width 
 :column: col-lg-6 px-2 py-2
 :header: text-center bg-white
@@ -190,9 +190,17 @@ def add_cards(profile_list, toc_dict_list, welcome_path):
 
 
 # # Testing area
-# example_toc =  load_toc_file('dsg/_toc.yml')
-# toc_dict_list = [example_toc,example_toc,example_toc]
-# edit_welcome_md(path_welcome_md,toc_dict_list)
+path_welcome_md = "master_enrichment/welcomeTest.md"
+
+example_toc =  load_toc_file('master_dsg/_toc.yml')
+another_toc = load_toc_file('master_enrichment/_toc.yml')
+third_toc = load_toc_file('master_group-leader/_toc.yml')
+toc_dict_list = [example_toc,another_toc,third_toc]
+
+profiles_list = ["dsg","enrichment","group-leader"]
+
+edit_welcome_md(path_welcome_md, toc_dict_list, profiles_list)
+
 
 # Broken things:
 # - Don't have the button titles DONE
