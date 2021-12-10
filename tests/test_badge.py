@@ -102,10 +102,11 @@ class TestInsertBadges(unittest.TestCase):
             mock_open.assert_any_call(fake_path / "file2.md", "w", encoding="utf-8")
             mock_open.assert_any_call(fake_path / "file3.md", "w", encoding="utf-8")
 
+            # ToDo Put spaces between badges
             mock_open.return_value.__enter__.return_value.write.assert_has_calls(
                 [
                     mock.call("# MyTitle\nbadgeA"),
-                    mock.call("# MyTitle\nbadgeAbadgeB"),
+                    mock.call("# MyTitle\nbadgeA\nbadgeB"),
                     mock.call("# MyTitle\nbadgeB"),
                 ]
             )
@@ -116,7 +117,7 @@ class TestEditText(unittest.TestCase):
 
     def test_simple(self):
         markdown = "(welcome)=\n# Welcome"
-        expected = "(welcome)=\n# Welcome\nbadgeAbadgeB"
+        expected = "(welcome)=\n# Welcome\nbadgeA\nbadgeB"
         actual = edit_text(["badgeA", "badgeB"], markdown)
         self.assertEqual(expected, actual)
 

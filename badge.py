@@ -66,7 +66,7 @@ def edit_text(badges, text):
 
     # Insert the badges
     text = (
-        text[: title_match.end()] + "\n" + "".join(badges) + text[title_match.end() :]
+        text[: title_match.end()] + "\n" + "\n".join(badges) + text[title_match.end() :]
     )
     return text
 
