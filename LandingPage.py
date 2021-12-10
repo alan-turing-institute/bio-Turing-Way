@@ -33,7 +33,7 @@ class LandingPage:
   def gather_curated_page_paths(self, toc):
     book = toc['parts'][0]
     chapters = book['chapters']
-    parent = 'chapter'
+    parent = 1
     curated_pages = []
     def getAllFiles(parent, listOfSectionsOrFiles, curated_pages):
       for section in listOfSectionsOrFiles:
@@ -43,7 +43,7 @@ class LandingPage:
           new_page = {'parent': parent, 'file_path': self.book_path+section['file']+".md"}
           curated_pages.append(new_page)
         if 'sections' in section:
-          getAllFiles('section',section['sections'], curated_pages)
+          getAllFiles(parent+1,section['sections'], curated_pages)
       return curated_pages    
 
     curated_pages = getAllFiles(parent, chapters, curated_pages)
@@ -94,14 +94,14 @@ class LandingPage:
     
     for curated_page in self.curated_pages:
       curated_page:CuratedPage = curated_page
-      level = 1
-      if curated_page.page_parent == 'chapter':
-        level = 1
-      if curated_page.page_parent == 'section':
-        level = 2
-      mdFile.new_header(level=level, title=curated_page.page_title)
+      # level = 1
+      # if curated_page.page_parent == 'chapter':
+      #   level = 1
+      # if curated_page.page_parent == 'section':
+      #   level = 2
+      mdFile.new_header(level=curated_page.page_parent, title=curated_page.page_title)
 
-    mdFile.new_table_of_contents(table_title='Curated Pages for {0}'.format(self.persona), depth=2)
+    mdFile.new_table_of_contents(table_title='Curated Pages for {0}'.format(self.persona), depth=3)
     mdFile.create_md_file()
 
 def sketchMe(curate_page_paths):
