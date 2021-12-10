@@ -1,7 +1,6 @@
 """Generate different pathways of the book, as determined by profiles.yml."""
-from pathlib import Path
-
-from markdown import markdown
+import re
+import urllib
 
 
 def extract_recursive(components):
@@ -36,7 +35,7 @@ def generate_shields_link(profile_name, colour):
     url = (
         "https://img.shields.io/static/v1"
         "?label=pathway"
-        f"&message={profile_name}"
+        f"&message={urllib.parse.quote(profile_name)}"
         f"&color={colour}"
     )
     return url
@@ -46,14 +45,30 @@ def insert_badges(book_path, badges, profiles):
     """Insert badges into the files specified by profiles."""
 
     # By using make_badge_dict(), we only need to open each file once
-    for key, value in make_badge_dict(badges, profiles).items():
-        # value is a list of badges and key is a filename
-        with open(book_path / (key + ".md"), "w", encoding="utf-8") as f:
-            text = f.read()
-            md = markdown(text)
+    badge_dict = make_badge_dict(badges, profiles)
 
-            # ToDo Insert badges below the title and save the file
-            assert False
+    for key, value in badge_dict.items():
+        # value is a list of badges and key is a filename
+        with open(book_path / (key + ".md"), "r", encoding="utf-8") as f:
+            text = f.read()
+
+        text = edit_text(value, text)
+
+        with open(book_path / (key + ".md"), "w", encoding="utf-8") as f:
+            f.write(text)
+
+
+def edit_text(badges, text):
+    """Insert badges into text, immediately after the title."""
+
+    # Find the title line
+    title_match = re.search(r"^# .*", text, re.MULTILINE)
+
+    # Insert the badges
+    text = (
+        text[: title_match.end()] + "\n" + "".join(badges) + text[title_match.end() :]
+    )
+    return text
 
 
 def make_badge_dict(badges, profiles):

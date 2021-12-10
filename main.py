@@ -11,10 +11,10 @@ from badge import generate_badge, insert_badges
 def get_toc_and_profiles(book_path):
     """Get the contents of _toc.yml and profiles.yml."""
 
-    with open(book_path / "_toc.yml", encoding="utf-8") as f:
+    with open(book_path / "_toc.yml", "r", encoding="utf-8") as f:
         toc = load(f, Loader=Loader)
 
-    with open(book_path / "profiles.yml", encoding="utf-8") as f:
+    with open(book_path / "profiles.yml", "r", encoding="utf-8") as f:
         profiles = load(f, Loader=Loader)
 
     return toc, profiles

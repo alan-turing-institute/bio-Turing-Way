@@ -1,11 +1,11 @@
-"""Tests for the  module."""
+"""Tests for the main module."""
 import unittest
 from pathlib import Path
 from unittest import mock
 
 from yaml import Loader, load
 
-from main import generate_tocs, get_toc_and_profiles, main, mask_parts, mask_toc
+from main import get_toc_and_profiles, main, mask_parts, mask_toc
 
 
 class TestMain(unittest.TestCase):
@@ -176,21 +176,6 @@ class TestMask(unittest.TestCase):
         self.assertListEqual(expected, actual)
 
 
-class TestGenerateTocs(unittest.TestCase):
-    """Test the generate_tocs function from the main module."""
-
-    def test_one_profile(self):
-        with mock.patch("main.mask_toc") as mock_mask_toc:
-            mock_mask_toc.return_value = {"new": "toc"}
-
-            toc = {"a": "toc"}
-            profiles = {"dsg": [], "phd": []}
-
-            actual = list(generate_tocs(toc, profiles))
-            expected = [("dsg", {"new": "toc"}), ("phd", {"new": "toc"})]
-            self.assertListEqual(expected, actual)
-
-
 class TestBuild(unittest.TestCase):
     """Test the build function from the main module."""
 
@@ -213,10 +198,14 @@ class TestGetTocAndProfiles(unittest.TestCase):
                 toc, profiles = get_toc_and_profiles(path)
 
                 try:
-                    mock_open.assert_any_call(Path("mybook/_toc.yml"))
-                    mock_open.assert_any_call(Path("mybook/profiles.yml"))
+                    mock_open.assert_any_call(
+                        Path("mybook/_toc.yml"), "r", encoding="utf-8"
+                    )
+                    mock_open.assert_any_call(
+                        Path("mybook/profiles.yml"), "r", encoding="utf-8"
+                    )
                 except AssertionError as e:
-                    print(mock_open.call_args)
+                    print(mock_open.call_args_list)
                     raise e
 
                 self.assertEqual(44, toc)
