@@ -169,8 +169,8 @@ def create_panel(list_titlelist, list_filelist, profile_list):
 
 # Create the button linking to the profile
 def create_profile_button(profile_name):
-    # ToDo Change this to either a relative path or, at least, the real Turing Way URL
-    relative_path = "/" + profile_name + ".md"
+    # ToDo: This needs to be an html path. 
+    relative_path = "/" + profile_name + ".html"
     start_button = "\n```{link-button} "
     text_button = "\n:text: "
     option_button = """\n:classes: bg-info text-white text-center font-weight-bold
@@ -188,22 +188,19 @@ def add_cards(profile_list, toc_dict_list, welcome_path):
 
     edit_welcome_md(welcome_path, toc_dict_list, profile_list)
 
+################################################################
 
-# # Testing area
+## Testing area for running these functions outside of main.py
+
 path_welcome_md = "master_enrichment/welcomeTest.md"
 
+# Grabbing example toc files, in main.py these dictionaries are provided directly. 
 example_toc =  load_toc_file('master_dsg/_toc.yml')
 another_toc = load_toc_file('master_enrichment/_toc.yml')
 third_toc = load_toc_file('master_group-leader/_toc.yml')
 toc_dict_list = [example_toc,another_toc,third_toc]
 
+# Hard coded names, the main.py provides these directly. 
 profiles_list = ["dsg","enrichment","group-leader"]
 
 edit_welcome_md(path_welcome_md, toc_dict_list, profiles_list)
-
-
-# Broken things:
-# - Don't have the button titles DONE
-# - Don't have the button links DONE
-# - Don't have the toc links
-# - Limit the number of bullet points DONE
