@@ -40,7 +40,9 @@ class LandingPage:
       curated_links = []
       for section in listOfSectionsOrFiles:
         if 'file' in section:
-          curated_links.append(section['file']+".md")
+          link = os.path.join('./',section['file']+".md")
+          title = self.get_title_from_curated_page(link)
+          curated_links.append(title)
           print("Curated Files: {0}".format(curated_links))
         if 'sections' in section:
           # print("Sections: {0}".format(section['sections']))
@@ -59,8 +61,6 @@ class LandingPage:
       for section in listOfSectionsOrFiles:
         if 'file' in section:
           new_page = {'parent': parent, 'file_path': section['file']+".md"}
-          # link = os.path.join('./',section['file']+".md")
-          # md_link=mdFile.new_inline_link(link=link, text=curated_page.page_title)
           curated_pages.append(new_page)
         if 'sections' in section:
           getAllFiles(parent+1,section['sections'], curated_pages)
@@ -69,7 +69,33 @@ class LandingPage:
     curated_pages = getAllFiles(parent, chapters, curated_pages)
     return curated_pages
 
-  
+  def get_title_from_curated_page(self, curated_page_path):
+    def list_header_open(tokens:list)->list:
+      header_opens = []
+      for t in tokens:
+        if (t.type=='heading_open'):
+          header_opens.append(t)
+      return header_opens
+    
+    def list_header_one(header_opens:list):
+      header_ones = []
+      for t in header_opens:
+        if (t.tag=='h1'):
+          header_ones.append(t)
+      return header_ones
+    
+    header_content = "Page:{0} title is not found".format(curated_page_path)
+    curated_page_path=os.path.join(self.book_path,curated_page_path)
+    with open(curated_page_path, "r", encoding="utf-8") as input_file:
+      text = input_file.read()
+      md = (MarkdownIt())
+      tokens:list = md.parse(text)
+      header_opens = list_header_open(tokens)
+      header_ones = list_header_one(header_opens)
+      header_content_index = tokens.index(header_ones[0])+1
+      header_content = tokens[header_content_index].content
+      return header_content
+
   def populate_from_curated_pages(self, curated_pages:list):
     """Get curated page titles to be used in generating toc"""
     def list_header_open(tokens:list)->list:
