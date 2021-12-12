@@ -5,46 +5,58 @@ import mdutils as mdutils
 import os
 
 class LandingPage:
+  """This class generates a markdown page.
+  Input: 
+  1. Path of Jupyter book, 
+  2. Label for audience of markdown page (eg. dsg)
+  3. A list containing the toc files whitelisted for this audience
+  Output:
+  1. A markdown page containing a toc with links curated for this audience
+  """
+
+  # This is the path of the jupyter book
   book_path = ''
+
   def __init__(self, persona=""):
+    # This is the audience label
     self.persona = persona
-    self.curated_pages = []
+    #  This is the title of the landing page
     self.landing_page_title = "Table of Contents for: {0}".format(self.persona)
+    #  This is the path of the landing page
     self.landing_page_path = os.path.join(self.book_path,self.persona)
+    # This is the instance of the class used to generate a markdown file. It is instantiated with the name of the file.
     self.mdFile = mdutils.MdUtils(file_name=self.landing_page_path)
 
   def __str__(self):
     aboutme = "Persona: {0}\n Title: {1}\n".format(self.persona, self.landing_page_title)
-    for p in range(0,len(self.curated_pages)):
-      aboutme = aboutme + "{0}\n".format(self.curated_pages[p])
     return aboutme
   
-  def set_class_variable(self, book_path):
-    self.book_path = book_path
-
   def gather_curated_links(self, toc):
-    book = toc['parts'][0]
-    chapters = book['chapters']
-    curated_links = []
-
-    def getLinksOfSection(listOfSectionsOrFiles):
+    """This generates a list containing markdown links to whitelisted pages
+    Input: Whitelisted toc (files and sections), arranged as required by the layout of the toc
+    Output: Links with url and page title, arranged as required by the layout of the toc
+    """
+    def getLinksOfSection(listOfSectionsOrFile):
       curated_links = []
-      for section in listOfSectionsOrFiles:
+      for section in listOfSectionsOrFile:
         if 'file' in section:
+          # Create a link to whitelisted file
           link = os.path.join('./',section['file']+".md")
           title = self.get_title_from_curated_page(link)
           md_link=self.mdFile.new_inline_link(link=link, text=title)
           curated_links.append(md_link)
-          # print("Curated Files: {0}".format(curated_links))
         if 'sections' in section:
-          # print("Sections: {0}".format(section['sections']))
           curated_links.append(getLinksOfSection(section['sections']))
       return curated_links
 
+    book = toc['parts'][0]
+    chapters = book['chapters']
+    curated_links = []
     curated_links= getLinksOfSection(chapters)
     return curated_links
 
   def get_title_from_curated_page(self, curated_page_path):
+    """Get title from curated page, given path"""
     def list_header_open(tokens:list)->list:
       header_opens = []
       for t in tokens:
