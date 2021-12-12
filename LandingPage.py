@@ -3,6 +3,7 @@ from markdown_it import MarkdownIt
 from mdit_py_plugins.front_matter import front_matter_plugin
 from mdit_py_plugins.footnote import footnote_plugin
 import mdutils as mdutils
+import os
 
 class CuratedPage:
   def __init__(self, page_path, page_title, page_parent):
@@ -37,10 +38,8 @@ class LandingPage:
     curated_pages = []
     def getAllFiles(parent, listOfSectionsOrFiles, curated_pages):
       for section in listOfSectionsOrFiles:
-        # print("Parent:{0} File:{1}".format(parent, f))
         if 'file' in section:
-          # print(section['file'])
-          new_page = {'parent': parent, 'file_path': self.book_path+section['file']+".md"}
+          new_page = {'parent': parent, 'file_path': section['file']+".md"}
           curated_pages.append(new_page)
         if 'sections' in section:
           getAllFiles(parent+1,section['sections'], curated_pages)
@@ -67,7 +66,7 @@ class LandingPage:
       return header_ones
 
     for curated_page in curated_pages:
-      curated_page_path=curated_page['file_path']
+      curated_page_path=os.path.join(self.book_path,curated_page['file_path'])
       curated_page_parent = curated_page['parent']
       with open(curated_page_path, "r", encoding="utf-8") as input_file:
         text = input_file.read()
@@ -78,7 +77,7 @@ class LandingPage:
         header_ones = list_header_one(header_opens)
         header_content_index = tokens.index(header_ones[0])+1
         header_content = tokens[header_content_index].content
-        a_curated_page = CuratedPage(page_path=curated_page_path, 
+        a_curated_page = CuratedPage(page_path=curated_page['file_path'], 
           page_title=header_content,
           page_parent=curated_page_parent)
         self.curated_pages.append(a_curated_page)
@@ -86,22 +85,23 @@ class LandingPage:
 
   def writeContent(self):
     """Populate landing page with curated toc"""
-    new_landing_page_path = self.book_path+self.persona
+    new_landing_page_path = os.path.join(self.book_path,self.persona)
     mdFile = mdutils.MdUtils(file_name=new_landing_page_path)
     # mdFile.new_header(level=1, title=self.landing_page_title, add_table_of_contents='n')
     intro_paragraph = "These are the pages curated for {0}".format(self.persona.upper())
-    # mdFile.new_paragraph(intro_paragraph)
+    mdFile.new_paragraph(intro_paragraph)
     
     for curated_page in self.curated_pages:
       curated_page:CuratedPage = curated_page
-      # level = 1
-      # if curated_page.page_parent == 'chapter':
-      #   level = 1
-      # if curated_page.page_parent == 'section':
-      #   level = 2
-      mdFile.new_header(level=curated_page.page_parent, title=curated_page.page_title)
-
-    mdFile.new_table_of_contents(table_title='Curated Pages for {0}'.format(self.persona), depth=3)
+      list_indent:str = ''
+      for s in range(0, (curated_page.page_parent-1)*4):
+        list_indent:str = list_indent.__add__(" ")
+      list_indent = list_indent.__add__("- ")
+      link = os.path.join('./',curated_page.page_path)
+      md_link=mdFile.new_inline_link(link=link, text=curated_page.page_title)
+      mdFile.new_line(list_indent+md_link)
+      # mdFile.new_line(mdFile.new_inline_link(link=link, text=curated_page.page_title))
+    
     mdFile.create_md_file()
 
 def sketchMe(curate_page_paths):

@@ -1,6 +1,7 @@
 import main as services
 import LandingPage as LandingPageClass
 from yaml import Loader, dump, load
+import os
 
 
 def setPageContent(book_path, profiles_and_tocs):
@@ -16,7 +17,8 @@ def setPageContent(book_path, profiles_and_tocs):
     # print(aLandingPage)
 
 if __name__ == "__main__":
-  book_path = '/Users/myong/Documents/workspace/bio-Turing-Way/master/'
+  book_path = os.path.join(os.path.dirname(__file__),'master')
+  print(book_path)
   toc, profiles = services.get_toc_and_profiles(book_path=book_path)
   profiles_and_tocs = list(services.generate_tocs(toc, profiles))
   setPageContent(book_path,profiles_and_tocs)
