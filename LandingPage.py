@@ -21,6 +21,8 @@ class LandingPage:
     self.persona = persona
     self.curated_pages = []
     self.landing_page_title = "Landing Page:"
+    self.landing_page_path = os.path.join(self.book_path,self.persona)
+    self.mdFile = mdutils.MdUtils(file_name=self.landing_page_path)
 
   def __str__(self):
     aboutme = "Persona: {0}\n Title: {1}\n".format(self.persona, self.landing_page_title)
@@ -36,21 +38,22 @@ class LandingPage:
     chapters = book['chapters']
     curated_links = []
 
-    def getFilesOfSection(listOfSectionsOrFiles):
+    def getLinksOfSection(listOfSectionsOrFiles):
       curated_links = []
       for section in listOfSectionsOrFiles:
         if 'file' in section:
           link = os.path.join('./',section['file']+".md")
           title = self.get_title_from_curated_page(link)
-          curated_links.append(title)
-          print("Curated Files: {0}".format(curated_links))
+          md_link=self.mdFile.new_inline_link(link=link, text=title)
+          curated_links.append(md_link)
+          # print("Curated Files: {0}".format(curated_links))
         if 'sections' in section:
           # print("Sections: {0}".format(section['sections']))
-          curated_links.append(getFilesOfSection(section['sections']))
+          curated_links.append(getLinksOfSection(section['sections']))
       return curated_links
 
-    curated_links= getFilesOfSection(chapters)
-    print(curated_links)
+    curated_links= getLinksOfSection(chapters)
+    return curated_links
 
   def gather_curated_page_paths(self, toc):
     book = toc['parts'][0]
@@ -130,28 +133,28 @@ class LandingPage:
         self.curated_pages.append(a_curated_page)
     return self
 
-  def writeContent(self):
+  def writeContent(self, curated_links):
     """Populate landing page with curated toc"""
-    new_landing_page_path = os.path.join(self.book_path,self.persona)
-    mdFile = mdutils.MdUtils(file_name=new_landing_page_path)
+    # new_landing_page_path = os.path.join(self.book_path,self.persona)
+    # mdFile = mdutils.MdUtils(file_name=new_landing_page_path)
     # mdFile.new_header(level=1, title=self.landing_page_title, add_table_of_contents='n')
     intro_paragraph = "These are the pages curated for {0}".format(self.persona.upper())
-    mdFile.new_paragraph(intro_paragraph)
+    self.mdFile.new_paragraph(intro_paragraph)
     
-    for curated_page in self.curated_pages:
-      curated_page:CuratedPage = curated_page
-      list_indent:str = ''
-      for s in range(0, (curated_page.page_parent-1)*4):
-        list_indent:str = list_indent.__add__(" ")
-      list_indent = list_indent.__add__("- ")
-      link = os.path.join('./',curated_page.page_path)
-      md_link=mdFile.new_inline_link(link=link, text=curated_page.page_title)
-      mdFile.new_line(list_indent+md_link)
-      items = [md_link]
-      mdFile.new_list(items)
+    # for curated_page in self.curated_pages:
+    #   curated_page:CuratedPage = curated_page
+    #   list_indent:str = ''
+    #   for s in range(0, (curated_page.page_parent-1)*4):
+    #     list_indent:str = list_indent.__add__(" ")
+    #   list_indent = list_indent.__add__("- ")
+    #   link = os.path.join('./',curated_page.page_path)
+    #   md_link=mdFile.new_inline_link(link=link, text=curated_page.page_title)
+    #   mdFile.new_line(list_indent+md_link)
+    #   items = [md_link]
+    self.mdFile.new_list(curated_links)
       # mdFile.new_line(mdFile.new_inline_link(link=link, text=curated_page.page_title))
     
-    mdFile.create_md_file()
+    self.mdFile.create_md_file()
 
 def sketchMe(curate_page_paths):
   aLandingPage=LandingPage("test")
