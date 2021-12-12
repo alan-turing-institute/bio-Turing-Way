@@ -31,6 +31,25 @@ class LandingPage:
   def set_class_variable(self, book_path):
     self.book_path = book_path
 
+  def gather_curated_links(self, toc):
+    book = toc['parts'][0]
+    chapters = book['chapters']
+    curated_links = []
+
+    def getFilesOfSection(listOfSectionsOrFiles):
+      curated_links = []
+      for section in listOfSectionsOrFiles:
+        if 'file' in section:
+          curated_links.append(section['file']+".md")
+          print("Curated Files: {0}".format(curated_links))
+        if 'sections' in section:
+          # print("Sections: {0}".format(section['sections']))
+          curated_links.append(getFilesOfSection(section['sections']))
+      return curated_links
+
+    curated_links= getFilesOfSection(chapters)
+    print(curated_links)
+
   def gather_curated_page_paths(self, toc):
     book = toc['parts'][0]
     chapters = book['chapters']
@@ -40,6 +59,8 @@ class LandingPage:
       for section in listOfSectionsOrFiles:
         if 'file' in section:
           new_page = {'parent': parent, 'file_path': section['file']+".md"}
+          # link = os.path.join('./',section['file']+".md")
+          # md_link=mdFile.new_inline_link(link=link, text=curated_page.page_title)
           curated_pages.append(new_page)
         if 'sections' in section:
           getAllFiles(parent+1,section['sections'], curated_pages)
@@ -100,6 +121,8 @@ class LandingPage:
       link = os.path.join('./',curated_page.page_path)
       md_link=mdFile.new_inline_link(link=link, text=curated_page.page_title)
       mdFile.new_line(list_indent+md_link)
+      items = [md_link]
+      mdFile.new_list(items)
       # mdFile.new_line(mdFile.new_inline_link(link=link, text=curated_page.page_title))
     
     mdFile.create_md_file()
