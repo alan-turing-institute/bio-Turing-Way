@@ -26,6 +26,7 @@ class LandingPage:
     self.landing_page_path = os.path.join(self.book_path,self.persona)
     # This is the instance of the class used to generate a markdown file. It is instantiated with the name of the file.
     self.mdFile = mdutils.MdUtils(file_name=self.landing_page_path)
+    self.curated_links = []
 
   def __str__(self):
     aboutme = "Persona: {0}\n Title: {1}\n".format(self.persona, self.landing_page_title)
@@ -51,9 +52,9 @@ class LandingPage:
 
     book = toc['parts'][0]
     chapters = book['chapters']
-    curated_links = []
-    curated_links= getLinksOfSection(chapters)
-    return curated_links
+    # curated_links = []
+    self.curated_links = getLinksOfSection(chapters)
+    # return curated_links
 
   def get_title_from_curated_page(self, curated_page_path):
     """Get title from curated page, given path"""
@@ -83,12 +84,12 @@ class LandingPage:
       header_content = tokens[header_content_index].content
     return header_content
 
-  def writeContent(self, curated_links):
+  def writeContent(self):
     """Populate landing page with curated toc"""
     self.mdFile.new_header(level=1, title=self.landing_page_title, add_table_of_contents='n')
     intro_paragraph = "These are the pages curated for {0}".format(self.persona.upper())
     self.mdFile.new_paragraph(intro_paragraph)
-    self.mdFile.new_list(curated_links)   
+    self.mdFile.new_list(self.curated_links)   
     self.mdFile.create_md_file()
 
 def setPageContent(book_path, profiles_and_tocs):
