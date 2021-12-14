@@ -2,6 +2,8 @@
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
+from shutil import copytree
+from subprocess import run
 
 from yaml import Loader, load
 
@@ -61,16 +63,18 @@ def pathways(book_path):
         landing_pages.append(generate_landing_page(profile["name"], new_toc))
 
     # Now that we have generated the new contents, copy the book before mutating
-    # ToDo Copy mybook/ to e.g. mybook_copy/
+    new_path = book_path.parent / (book_path.name + "_copy")
+    copytree(book_path, new_path, dirs_exist_ok=True)
 
-    insert_cards(book_path / "welcome.md", cards)
+    insert_cards(new_path / "welcome.md", cards)
 
     profile_names = [profile["name"] for profile in profiles]
     create_landing_pages(book_path, landing_pages, profile_names)
 
-    insert_badges(book_path, badges, profiles)
+    insert_badges(new_path, badges, profiles)
 
-    # ToDo Shall we call `jupyter-book build mybook_copy/` here?
+    run(["jupyter-book", "build", new_path], check=True)
+    # rmtree(new_path)
 
     print("Finished adding pathways.")
 
