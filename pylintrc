@@ -145,6 +145,7 @@ disable=abstract-method,
         xrange-builtin,
         zip-builtin-not-iterating,
         use-dict-literal,
+        consider-using-f-string
 
 
 [REPORTS]

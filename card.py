@@ -32,7 +32,7 @@ def insert_into_md(path_welcome_md, heading_title, panel_string):
 
 def get_text_from_md(path_welcome_md):
     """Get the text from the markdown file."""
-    with open(path_welcome_md, "r") as md:
+    with open(path_welcome_md, "r", encoding="utf-8") as md:
         md_text = md.read()
     return md_text
 
@@ -45,7 +45,7 @@ def insert_text_after_string(md_text, heading_title, panel_string):
 
 def overwrite_md(new_md_text, path_welcome_md):
     """Overwrite the markdown file with new added panel text."""
-    with open(path_welcome_md, "w") as txt:
+    with open(path_welcome_md, "w", encoding="utf-8") as txt:
         txt.write(new_md_text)
 
 

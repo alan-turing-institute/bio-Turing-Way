@@ -6,7 +6,8 @@ from shutil import copytree
 from subprocess import run
 
 from yaml import Loader, load
-import LandingPage as LandingPageClass
+
+import landing_page
 from badge import generate_badge, insert_badges
 from card import HEADING_TITLE, create_card, create_panel, insert_into_md
 
@@ -28,36 +29,25 @@ def generate_card(profile: dict):
 
 
 def generate_landing_page(profile, toc):
-    # del profile
-    # del toc
-    print(toc)
-    aLandingPage = LandingPageClass.LandingPage(persona=profile)
-    aLandingPage.gather_curated_links(toc)
-    print(aLandingPage.curated_links)
-    return aLandingPage
-    print("generate_landing_page not implemented!")
+    a_landing_page = landing_page.LandingPage(persona=profile)
+    a_landing_page.gather_curated_links(toc)
+    return a_landing_page
 
 
 def insert_cards(welcome_path, cards):
     insert_into_md(welcome_path, HEADING_TITLE, create_panel(cards))
 
 
-def create_landing_pages(landing_pages):
-    # del profile_names
-    # del book_path
-    # del landing_pages
-    
+def insert_landing_pages(landing_pages):
     for lp in landing_pages:
-        print(lp)
-        lp.writeContent()
-    print("create_landing_pages implemented!")
+        lp.write_content()
 
 
 def pathways(book_path):
     """Add extra pathways to the book."""
 
     # The contents of _toc.yml and profiles.yml contents
-    LandingPageClass.LandingPage.book_path = book_path
+    landing_page.LandingPage.book_path = book_path
     toc, profiles = get_toc_and_profiles(book_path)
 
     landing_pages = []
@@ -67,20 +57,18 @@ def pathways(book_path):
 
     for profile in profiles:
         # Input profile is profile name + file list
-        cards.append(generate_card(profile)) 
+        cards.append(generate_card(profile))
         badges.append(generate_badge(profile["name"], profile["colour"]))
-        landing_pages.append(generate_landing_page(profile["name"], generate_toc(toc, profile)))
+        landing_pages.append(
+            generate_landing_page(profile["name"], generate_toc(toc, profile))
+        )
 
     # Now that we have generated the new contents, copy the book before mutating
     new_path = book_path.parent / (book_path.name + "_copy")
     copytree(book_path, new_path, dirs_exist_ok=True)
 
     insert_cards(new_path / "welcome.md", cards)
-
-    profile_names = [profile["name"] for profile in profiles]
-    
-    create_landing_pages(landing_pages)
-
+    insert_landing_pages(landing_pages)
     insert_badges(new_path, badges, profiles)
 
     run(["jupyter-book", "build", new_path], check=True)
