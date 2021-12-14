@@ -1,7 +1,7 @@
 [build]
-  base = "master"
-  command = "pip install -r requirements.txt && python ../main.py build ."
-  publish = "_build/html"
+  base = "."
+  command = "pip install -r master/requirements.txt && python main.py pathways master/"
+  publish = "master_copy/_build/html"
 
 # Do not build deploy previews for branches from all-contributors bot
 [context.deploy-preview]
