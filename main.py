@@ -4,7 +4,7 @@ from argparse import ArgumentParser
 from pathlib import Path
 
 from yaml import Loader, load
-
+import LandingPage as LandingPageClass
 from badge import generate_badge, insert_badges
 
 
@@ -27,8 +27,13 @@ def generate_card(profile, toc):
 
 
 def generate_landing_page(profile, toc):
-    del profile
-    del toc
+    # del profile
+    # del toc
+    print(toc)
+    aLandingPage = LandingPageClass.LandingPage(persona=profile)
+    aLandingPage.gather_curated_links(toc)
+    print(aLandingPage.curated_links)
+    return aLandingPage
     print("generate_landing_page not implemented!")
 
 
@@ -38,17 +43,22 @@ def insert_cards(welcome_path, cards):
     print("insert_cards not implemented!")
 
 
-def create_landing_pages(book_path, landing_pages, profile_names):
-    del profile_names
-    del book_path
-    del landing_pages
-    print("create_landing_pages not implemented!")
+def create_landing_pages(landing_pages):
+    # del profile_names
+    # del book_path
+    # del landing_pages
+    
+    for lp in landing_pages:
+        print(lp)
+        lp.writeContent()
+    print("create_landing_pages implemented!")
 
 
 def pathways(book_path):
     """Add extra pathways to the book."""
 
     # The contents of _toc.yml and profiles.yml contents
+    LandingPageClass.LandingPage.book_path = book_path
     toc, profiles = get_toc_and_profiles(book_path)
 
     landing_pages = []
@@ -57,21 +67,23 @@ def pathways(book_path):
 
     for profile in profiles:
         new_toc = generate_toc(toc, profile)
-        cards.append(generate_card(profile["name"], new_toc))
+        # cards.append(generate_card(profile["name"], new_toc))
 
-        badges.append(generate_badge(profile["name"], profile["colour"]))
+        # badges.append(generate_badge(profile["name"], profile["colour"]))
 
-        landing_pages.append(generate_landing_page(profile["name"], new_toc))
+        aLandingPage = generate_landing_page(profile["name"], new_toc)
+        landing_pages.append(aLandingPage)
 
     # Now that we have generated the new contents, copy the book before mutating
     # ToDo Copy mybook/ to e.g. mybook_copy/
 
-    insert_cards(book_path / "welcome.md", cards)
+    # insert_cards(book_path / "welcome.md", cards)
 
     profile_names = [profile["name"] for profile in profiles]
-    create_landing_pages(book_path, landing_pages, profile_names)
+    
+    create_landing_pages(landing_pages)
 
-    insert_badges(book_path, badges, profiles)
+    # insert_badges(book_path, badges, profiles)
 
     # ToDo Shall we call `jupyter-book build mybook_copy/` here?
 
@@ -156,9 +168,9 @@ def mask_toc(toc, whitelist):
 
 def generate_toc(toc, profile):
     """Generate a new ToC for each profile."""
-
     return mask_toc(toc, profile["files"])
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])  # pragma: no cover
+    # main(sys.argv[1:])  # pragma: no cover
+    main(['pathways','master'])
