@@ -43,8 +43,8 @@ class LandingPage:
         if 'file' in section:
           # Create a link to whitelisted file
           link = os.path.join('./',section['file']+".md")
-          title = self.get_title_from_curated_page(link)
-          md_link=self.mdFile.new_inline_link(link=link, text=title)
+          # title = self.get_title_from_curated_page(link)
+          md_link=self.mdFile.new_inline_link(link=link, text="")
           curated_links.append(md_link)
         if 'sections' in section:
           curated_links.append(getLinksOfSection(section['sections']))
@@ -52,12 +52,9 @@ class LandingPage:
 
     book = toc['parts'][0]
     chapters = book['chapters']
-    # curated_links = []
     self.curated_links = getLinksOfSection(chapters)
-    # return curated_links
 
-  def get_title_from_curated_page(self, curated_page_path):
-    """Get title from curated page, given path"""
+  def get_title_from_text(self, markdown_text):
     def list_header_open(tokens:list)->list:
       header_opens = []
       for t in tokens:
@@ -71,17 +68,23 @@ class LandingPage:
         if (t.tag=='h1'):
           header_ones.append(t)
       return header_ones
+
+    md = (MarkdownIt())
+    tokens:list = md.parse(markdown_text)
+    header_opens = list_header_open(tokens)
+    header_ones = list_header_one(header_opens)
+    header_content_index = tokens.index(header_ones[0])+1
+    header_content = tokens[header_content_index].content
+    return header_content
+
+  def get_title_from_curated_page(self, curated_page_path):
+    """Get title from curated page, given path"""
     
     header_content = "Page:{0} title is not found".format(curated_page_path)
     curated_page_path=os.path.join(self.book_path,curated_page_path)
     with open(curated_page_path, "r", encoding="utf-8") as input_file:
-      text = input_file.read()
-      md = (MarkdownIt())
-      tokens:list = md.parse(text)
-      header_opens = list_header_open(tokens)
-      header_ones = list_header_one(header_opens)
-      header_content_index = tokens.index(header_ones[0])+1
-      header_content = tokens[header_content_index].content
+      markdown_text = input_file.read()
+      header_content = self.get_title_from_text(markdown_text)
     return header_content
 
   def writeContent(self):
@@ -99,11 +102,13 @@ def setPageContent(book_path, profiles_and_tocs):
     profile = profiles_and_tocs[p][0]
     white_listed_toc = profiles_and_tocs[p][1]
     aLandingPage = LandingPage(persona=profile)
+    print(white_listed_toc)
     curated_links = aLandingPage.gather_curated_links(white_listed_toc)
-    aLandingPage.writeContent(curated_links)
+    print(curated_links)
+    # aLandingPage.writeContent(curated_links)
 
 if __name__ == "__main__":
   book_path = os.path.join(os.path.dirname(__file__),'master')
-  toc, profiles = services.get_toc_and_profiles(book_path=book_path)
-  profiles_and_tocs = list(services.generate_tocs(toc, profiles))
-  setPageContent(book_path,profiles_and_tocs)
+  # toc, profiles = services.get_toc_and_profiles(book_path=book_path)
+  # profiles_and_tocs = list(services.generate_tocs(toc, profiles))
+  # setPageContent(book_path,profiles_and_tocs)
