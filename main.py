@@ -6,8 +6,7 @@ from pathlib import Path
 from yaml import Loader, load
 
 from badge import generate_badge, insert_badges
-
-from card_text import add_cards
+from card import HEADING_TITLE, create_card, create_panel, insert_into_md
 
 
 def get_toc_and_profiles(book_path):
@@ -22,10 +21,8 @@ def get_toc_and_profiles(book_path):
     return toc, profiles
 
 
-def generate_card(profile, toc):
-    del profile
-    del toc
-    print("generate_card not implemented!")
+def generate_card(profile: dict):
+    return create_card(profile["name"], profile["files"])
 
 
 def generate_landing_page(profile, toc):
@@ -35,9 +32,7 @@ def generate_landing_page(profile, toc):
 
 
 def insert_cards(welcome_path, cards):
-    del welcome_path
-    del cards
-    print("insert_cards not implemented!")
+    insert_into_md(welcome_path, HEADING_TITLE, create_panel(cards))
 
 
 def create_landing_pages(book_path, landing_pages, profile_names):
@@ -50,7 +45,7 @@ def create_landing_pages(book_path, landing_pages, profile_names):
 def pathways(book_path):
     """Add extra pathways to the book."""
 
-    # The contents of _toc.yml and profiles.yml contents
+    # The contents of _toc.yml and profiles.yml
     toc, profiles = get_toc_and_profiles(book_path)
 
     landing_pages = []
@@ -59,7 +54,7 @@ def pathways(book_path):
 
     for profile in profiles:
         new_toc = generate_toc(toc, profile)
-        cards.append(generate_card(profile["name"], new_toc))
+        cards.append(generate_card(profile))
 
         badges.append(generate_badge(profile["name"], profile["colour"]))
 
