@@ -17,8 +17,8 @@ class TestGenerateBadges(unittest.TestCase):
 
     def test_simple(self):
         # pylint: disable=line-too-long
-        expected = "[![](https://img.shields.io/static/v1?label=pathway&message=myprofile&color=green)](myprofile.md)"
-        actual = generate_badge("myprofile", "green")
+        expected = "[![](https://img.shields.io/static/v1?label=pathway&message=myprofile&color=green)](/alandingpage.md)"
+        actual = generate_badge("myprofile", "green", "alandingpage")
         self.assertEqual(expected, actual)
 
 
