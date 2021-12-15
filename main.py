@@ -42,6 +42,8 @@ def insert_landing_pages(landing_pages):
     for lp in landing_pages:
         lp.write_content()
 
+def generate_landing_name(profile_name):
+    return profile_name.lower()
 
 def pathways(book_path):
     """Add extra pathways to the book."""
@@ -59,7 +61,7 @@ def pathways(book_path):
     # landing_pages_paths = [{'profile': "dsg", path:"./dsg"}]
     
     for profile in profiles:
-        landing_name = profile["name"].lower()
+        landing_name = generate_landing_name(profile["name"])
         # Input profile is profile name + file list
         cards.append(generate_card(profile,landing_name))
         badges.append(generate_badge(profile["name"], profile["colour"],landing_name))
