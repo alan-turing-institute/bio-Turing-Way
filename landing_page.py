@@ -26,7 +26,6 @@ class LandingPage:
         #  This is the path of the landing page
         # self.landing_page_path = os.path.join(self.book_path, self.persona)
         self.landing_page_path = os.path.join(self.book_path, landing_name)
-        print(self.landing_page_path)
         # This is the instance of the class used to generate a markdown file.
         # It is instantiated with the name of the file.
         self.md_file = mdutils.MdUtils(file_name=self.landing_page_path)
@@ -107,3 +106,5 @@ class LandingPage:
         self.md_file.new_paragraph(intro_paragraph)
         self.md_file.new_list(self.curated_links)
         self.md_file.create_md_file()
+        print(self.md_file.file_data_text)
+        return self.md_file.file_data_text
