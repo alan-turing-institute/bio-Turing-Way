@@ -8,10 +8,15 @@ class TestCreateCard(unittest.TestCase):
     """Tests for the create_card function."""
 
     def test_simple(self):
-        file_list = ["welcome", "communication/communication", "communication/comms-overview", "communication/comms-overview/comms-overview-principles"]
-        actual = create_card("SomePersona", file_list)
+        file_list = [
+            "welcome",
+            "communication/communication",
+            "communication/comms-overview",
+            "communication/comms-overview/comms-overview-principles",
+        ]
+        actual = create_card("SomePersona", file_list, "sinner")
         expected = (
-            "```{link-button} ./somepersona.html\n"
+            "```{link-button} ./sinner.html\n"
             ":text: SomePersona\n"
             ":classes: bg-info text-white text-center font-weight-bold\n"
             "```\n"
