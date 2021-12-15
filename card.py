@@ -37,9 +37,9 @@ def create_bullet_string(file_list):
 
     return toc_string
 
-def create_card(profile_name, file_list):
+def create_card(profile_name, file_list, landing_name):
     """Create a single card."""
-    button_string = create_profile_button(profile_name)
+    button_string = create_profile_button(profile_name, landing_name)
     toc_string = create_bullet_string(file_list)
     return button_string + toc_string
 
@@ -61,9 +61,10 @@ def create_panel(list_cards):
     panel_string += panel_end
     return panel_string
 
-def create_profile_button(profile_name):
+def create_profile_button(profile_name, landing_name):
     """Create the button linking to the profile."""
-    relative_path = "./" + profile_name.lower() + ".html"
+    # relative_path = "./" + profile_name.lower() + ".html"
+    relative_path = "./{0}.html".format(landing_name)
     start_button = "```{link-button} "
     text_button = "\n:text: "
     option_button = "\n:classes: bg-info text-white text-center font-weight-bold\n```"

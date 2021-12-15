@@ -24,12 +24,12 @@ def get_toc_and_profiles(book_path):
     return toc, profiles
 
 
-def generate_card(profile: dict):
-    return create_card(profile["name"], profile["files"])
+def generate_card(profile: dict,landing_name):
+    return create_card(profile["name"], profile["files"],landing_name=landing_name)
 
 
-def generate_landing_page(profile, toc):
-    a_landing_page = landing_page.LandingPage(persona=profile)
+def generate_landing_page(profile, toc,landing_name):
+    a_landing_page = landing_page.LandingPage(persona=profile,landing_name=landing_name)
     a_landing_page.gather_curated_links(toc)
     return a_landing_page
 
@@ -47,25 +47,25 @@ def pathways(book_path):
     """Add extra pathways to the book."""
 
     # The contents of _toc.yml and profiles.yml contents
-    landing_page.LandingPage.book_path = book_path
-    toc, profiles = get_toc_and_profiles(book_path)
+    new_path = book_path.parent / (book_path.name + "_copy")
+    copytree(book_path, new_path, dirs_exist_ok=True)
+
+    landing_page.LandingPage.book_path = new_path
+    toc, profiles = get_toc_and_profiles(new_path)
 
     landing_pages = []
     badges = []
     cards = []
     # landing_pages_paths = [{'profile': "dsg", path:"./dsg"}]
-
+    
     for profile in profiles:
+        landing_name = profile["name"].lower()
         # Input profile is profile name + file list
-        cards.append(generate_card(profile))
-        badges.append(generate_badge(profile["name"], profile["colour"]))
+        cards.append(generate_card(profile,landing_name))
+        badges.append(generate_badge(profile["name"], profile["colour"],landing_name))
         landing_pages.append(
-            generate_landing_page(profile["name"], generate_toc(toc, profile))
+            generate_landing_page(profile["name"], generate_toc(toc, profile),landing_name)
         )
-
-    # Now that we have generated the new contents, copy the book before mutating
-    new_path = book_path.parent / (book_path.name + "_copy")
-    copytree(book_path, new_path, dirs_exist_ok=True)
 
     insert_cards(new_path / "welcome.md", cards)
     insert_landing_pages(landing_pages)
@@ -160,3 +160,4 @@ def generate_toc(toc, profile):
 
 if __name__ == "__main__":
     main(sys.argv[1:])  # pragma: no cover
+    

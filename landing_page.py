@@ -18,13 +18,15 @@ class LandingPage:
     # This is the path of the jupyter book
     book_path = ""
 
-    def __init__(self, persona=""):
+    def __init__(self, persona="", landing_name=""):
         # This is the audience label
         self.persona = persona
         #  This is the title of the landing page
         self.landing_page_title = "Table of Contents for: {0}".format(self.persona)
         #  This is the path of the landing page
-        self.landing_page_path = os.path.join(self.book_path, self.persona)
+        # self.landing_page_path = os.path.join(self.book_path, self.persona)
+        self.landing_page_path = os.path.join(self.book_path, landing_name)
+        print(self.landing_page_path)
         # This is the instance of the class used to generate a markdown file.
         # It is instantiated with the name of the file.
         self.md_file = mdutils.MdUtils(file_name=self.landing_page_path)
