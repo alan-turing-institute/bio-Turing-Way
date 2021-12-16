@@ -48,4 +48,4 @@ jobs:
 
       - name: Run unit tests
         run: |
-          ./run_tests.sh
+          poetry run ./run_tests.sh
