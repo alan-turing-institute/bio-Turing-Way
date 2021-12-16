@@ -16,14 +16,30 @@ jobs:
         with:
           python-version: '3.8'
 
-      - uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ hashFiles('pathways/poetry.lock') }}
-
-      - name: Install Requirements
+      - name: Bootstrap poetry
+        shell: bash
         run: |
-          pip install ./
+          python -m ensurepip
+          python -m pip install --upgrade pip
+          python -m pip install poetry
+
+      - name: Configure poetry
+        shell: bash
+        run: |
+          python -m poetry config virtualenvs.in-project true
+          python -m poetry config virtualenvs.create true
+
+      - name: Set up cache
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: .venv
+          key: venv-${{ hashFiles('poetry.lock') }}-${{ hashFiles('pyproject.toml') }}
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          python -m poetry install
 
       - name: pre-commit
         uses: pre-commit/action@v2.0.3
