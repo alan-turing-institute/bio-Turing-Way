@@ -16,6 +16,11 @@ jobs:
         with:
           python-version: '3.8'
 
+      - name: Print Working Dir
+        shell: bash
+        run: |
+          pwd
+
       - name: Bootstrap poetry
         shell: bash
         run: |
