@@ -1,16 +1,9 @@
 name: Pre-Commit Checks
 on:
-  pull_request:
-    branches:
-      main
-  push:
-    branches:
-      main
+  [push]
 jobs:
   tests:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.1
@@ -23,18 +16,17 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: ~/.cache/pip
-          key: ${{ hashFiles('requirements.txt') }}
+          key: ${{ hashFiles('pathways/poetry.lock') }}
 
       - name: Install Requirements
         run: |
-          pip install -r requirements.txt
+          pip install pathways/
 
-      # Will run our tests with coverage for us
       - name: pre-commit
         uses: pre-commit/action@v2.0.3
         with:
-          extra_args: --files main.py tests/test_main.py
+          extra_args: --files pathways/**/* 
 
       - name: Run unit tests
         run: |
-          ./run_tests.sh
+          cd pathways/ && ./run_tests.sh

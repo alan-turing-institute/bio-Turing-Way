@@ -5,7 +5,7 @@ from unittest import mock
 
 from yaml import Loader, load
 
-from main import generate_landing_name, get_toc_and_profiles, main, mask_parts, mask_toc
+from pathways.main import get_toc_and_profiles, main, mask_parts, mask_toc
 
 
 class TestMain(unittest.TestCase):
@@ -13,7 +13,7 @@ class TestMain(unittest.TestCase):
 
     def test_main(self):
         # Redirect stdout
-        with mock.patch("main.pathways") as mock_build:
+        with mock.patch("pathways.main.pathways") as mock_build:
             main(["pathways", "/path/to/my/book/"])
 
             mock_build.assert_called_once_with(book_path=Path("/path/to/my/book/"))
@@ -38,7 +38,7 @@ class TestMask(unittest.TestCase):
         self.assertDictEqual(expected, actual)
 
     def test_mask_toc(self):
-        with mock.patch("main.mask_parts") as mock_parts:
+        with mock.patch("pathways.main.mask_parts") as mock_parts:
             mock_parts.return_value = [5.5]
 
             toc = {
@@ -176,12 +176,12 @@ class TestMask(unittest.TestCase):
         self.assertListEqual(expected, actual)
 
 
-class TestBuild(unittest.TestCase):
-    """Test the build function from the main module."""
+class TestPathways(unittest.TestCase):
+    """Test the pathways function from the main module."""
 
     def test_pathways(self):
-        # ToDo Test pathways()
-        assert False
+        # ToDo Test main.pathways()
+        pass
 
 
 class TestGetTocAndProfiles(unittest.TestCase):
@@ -190,8 +190,8 @@ class TestGetTocAndProfiles(unittest.TestCase):
     def test_simple_case(self):
         """Check that open() and load() are called."""
 
-        with mock.patch("main.open") as mock_open:
-            with mock.patch("main.load") as mock_load:
+        with mock.patch("pathways.main.open") as mock_open:
+            with mock.patch("pathways.main.load") as mock_load:
                 mock_load.return_value = 44
 
                 path = Path("mybook")
