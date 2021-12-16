@@ -4,6 +4,7 @@ import unittest
 
 from pathways.landing_page import LandingPage
 
+
 class TestGetPageTitle(unittest.TestCase):
     """Tests for generate_badge function."""
 

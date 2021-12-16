@@ -4,6 +4,9 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pathways
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.1
@@ -20,13 +23,13 @@ jobs:
 
       - name: Install Requirements
         run: |
-          pip install pathways/
+          pip install ./
 
       - name: pre-commit
         uses: pre-commit/action@v2.0.3
         with:
-          extra_args: --files pathways/**/* 
+          extra_args: --files ./**/*
 
       - name: Run unit tests
         run: |
-          cd pathways/ && ./run_tests.sh
+          ./run_tests.sh
