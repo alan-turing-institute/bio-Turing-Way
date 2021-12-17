@@ -5,7 +5,7 @@
 
 #######################################################################################
 # Book settings
-title                       : The Turing Way  # The title of the book. Will be placed in the left navbar.
+title                       : The Turing Way - Persona # The title of the book. Will be placed in the left navbar.
 author                      : The Turing Way Community  # The author of the book
 copyright                   : "2020-2021"  # Copyright year to be placed in the footer
 logo                        : "./figures/logo/logo.jpg"  # A path to the book logo
@@ -53,7 +53,7 @@ sphinx:
   extra_extensions          :  # A list of extra extensions to load by Sphinx.
   config                    :  # key-value pairs to directly over-ride the Sphinx configuration
     language                : en
-    
+
 bibtex_bibfiles:
     - _bibliography/references.bib
 
