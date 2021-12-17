@@ -1,6 +1,6 @@
 [build]
   base = "."
-  command = "pip install -r pathways && python -m pathways.main pathways master/"
+  command = "pip install pathways/ && python -m pathways.main pathways master/"
   publish = "master_copy/_build/html"
 
 # Do not build deploy previews for branches from all-contributors bot
