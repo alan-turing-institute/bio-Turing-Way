@@ -106,5 +106,5 @@ class LandingPage:
         self.md_file.new_paragraph(intro_paragraph)
         self.md_file.new_list(self.curated_links)
         self.md_file.create_md_file()
-        print(self.md_file.file_data_text)
+
         return self.md_file.file_data_text

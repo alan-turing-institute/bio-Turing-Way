@@ -2,7 +2,7 @@
 import json
 import unittest
 
-from landing_page import LandingPage
+from pathways.landing_page import LandingPage
 
 
 class TestGetPageTitle(unittest.TestCase):

@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from badge import (
+from pathways.badge import (
     edit_text,
     generate_badge,
     generate_shields_link,
@@ -77,7 +77,7 @@ class TestInsertBadges(unittest.TestCase):
     """Tests for the insert_badges function."""
 
     def test_simple(self):
-        with mock.patch("badge.open") as mock_open:
+        with mock.patch("pathways.badge.open") as mock_open:
             mock_open.return_value.__enter__.return_value.read.return_value = (
                 "# MyTitle"
             )

@@ -7,9 +7,9 @@ from subprocess import run
 
 from yaml import Loader, load
 
-import landing_page
-from badge import generate_badge, insert_badges
-from card import HEADING_TITLE, create_card, create_panel, insert_into_md
+from pathways import landing_page
+from pathways.badge import generate_badge, insert_badges
+from pathways.card import HEADING_TITLE, create_card, create_panel, insert_into_md
 
 
 def get_toc_and_profiles(book_path):

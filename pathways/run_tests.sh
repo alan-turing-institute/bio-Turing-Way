@@ -7,9 +7,9 @@ set -o errexit
 
 # Run our unit tests with code coverage
 # shellcheck disable=SC2140
-coverage run -m unittest discover tests/
+python -m coverage run -m unittest discover tests/
 
-coverage combine
+python -m coverage combine
 
 # Show the lines our tests miss
-coverage report --show-missing
+python -m coverage report --show-missing

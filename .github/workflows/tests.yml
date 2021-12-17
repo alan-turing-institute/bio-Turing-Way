@@ -1,16 +1,12 @@
 name: Pre-Commit Checks
 on:
-  pull_request:
-    branches:
-      main
-  push:
-    branches:
-      main
+  [push]
 jobs:
   tests:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    defaults:
+      run:
+        working-directory: pathways
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.1
@@ -20,21 +16,48 @@ jobs:
         with:
           python-version: '3.8'
 
-      - uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ hashFiles('requirements.txt') }}
-
-      - name: Install Requirements
+      - name: Print Working Dir
+        shell: bash
         run: |
-          pip install -r requirements.txt
+          pwd
 
-      # Will run our tests with coverage for us
+      - name: Bootstrap poetry
+        shell: bash
+        run: |
+          python -m ensurepip
+          python -m pip install --upgrade pip
+          python -m pip install poetry
+
+      - name: Configure poetry
+        shell: bash
+        run: |
+          python -m poetry config virtualenvs.in-project true
+          python -m poetry config virtualenvs.create true
+
+      - name: Set up cache
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: .venv
+          key: venv-${{ hashFiles('poetry.lock') }}-${{ hashFiles('pyproject.toml') }}
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          python -m poetry install
+
       - name: pre-commit
         uses: pre-commit/action@v2.0.3
         with:
-          extra_args: --files main.py tests/test_main.py
+          extra_args: --files pathways/tests/*
+
+      - name: local-pre-commit
+        shell: bash
+        run: |
+          pre-commit install
+          pre-commit run --files tests/*
+          pre-commit run --files pathways/*
 
       - name: Run unit tests
         run: |
-          ./run_tests.sh
+          poetry run ./run_tests.sh

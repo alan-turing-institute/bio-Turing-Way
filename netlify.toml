@@ -1,6 +1,6 @@
 [build]
   base = "."
-  command = "pip install -r master/requirements.txt && python main.py pathways master/"
+  command = "pip install -r pathways && python -m pathways.main pathways master/"
   publish = "master_copy/_build/html"
 
 # Do not build deploy previews for branches from all-contributors bot
@@ -216,6 +216,3 @@ fi
   # The default HTTP status code is 301, but you can define a different one.
   status = 301
   force = true
-
-
-

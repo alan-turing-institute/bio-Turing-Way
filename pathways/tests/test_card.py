@@ -1,7 +1,7 @@
 """Tests for the cards module."""
 import unittest
 
-from card import create_card, create_panel, insert_text_after_string
+from pathways.card import create_card, create_panel, insert_text_after_string
 
 
 class TestCreateCard(unittest.TestCase):
