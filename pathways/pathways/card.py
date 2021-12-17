@@ -2,6 +2,7 @@
 
 HEADING_TITLE = "## Different Profiles"
 
+
 def insert_into_md(path_welcome_md, heading_title, panel_string):
     """Take the markdown file, add the panels, and save the markdown file."""
 
@@ -9,21 +10,25 @@ def insert_into_md(path_welcome_md, heading_title, panel_string):
     new_md_text = insert_text_after_string(md_text, heading_title, panel_string)
     overwrite_md(new_md_text, path_welcome_md)
 
+
 def get_text_from_md(path_welcome_md):
     """Get the text from the markdown file."""
     with open(path_welcome_md, "r", encoding="utf-8") as md:
         md_text = md.read()
     return md_text
 
+
 def insert_text_after_string(md_text, heading_title, panel_string):
     """Look for a heading and insert string after that heading."""
     md_text = md_text.replace(heading_title, heading_title + "\n" + panel_string)
     return md_text
 
+
 def overwrite_md(new_md_text, path_welcome_md):
     """Overwrite the markdown file with new added panel text."""
     with open(path_welcome_md, "w", encoding="utf-8") as txt:
         txt.write(new_md_text)
+
 
 def create_bullet_string(file_list):
     """From the list of files for a single toc, create a bullet point string."""
@@ -37,14 +42,16 @@ def create_bullet_string(file_list):
 
     return toc_string
 
+
 def create_card(profile_name, file_list, landing_name):
     """Create a single card."""
     button_string = create_profile_button(profile_name, landing_name)
     toc_string = create_bullet_string(file_list)
     return button_string + toc_string
 
+
 def create_panel(list_cards):
-    """Create the full panel, with all cards.""" 
+    """Create the full panel, with all cards."""
 
     panel_start = (
         ":::{panels}\n"
@@ -60,6 +67,7 @@ def create_panel(list_cards):
     panel_string += "\n---\n".join(list_cards)
     panel_string += panel_end
     return panel_string
+
 
 def create_profile_button(profile_name, landing_name):
     """Create the button linking to the profile."""
