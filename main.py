@@ -1,5 +1,5 @@
 """Generate different pathways of the book, as determined by profiles.yml."""
-# import sys
+import sys
 from argparse import ArgumentParser
 from pathlib import Path
 from shutil import copytree
@@ -168,5 +168,5 @@ def generate_toc(toc, profile):
 
 
 if __name__ == "__main__":
-    # main(sys.argv[1:])  # pragma: no cover
-    main(["pathways", "master"])
+    main(sys.argv[1:])  # pragma: no cover
+    # main(["pathways", "master"])
