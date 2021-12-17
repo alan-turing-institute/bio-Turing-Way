@@ -2,13 +2,13 @@
 
 ![Codestyle Black](https://img.shields.io/badge/code%20style-black-000000.svg)
 
-----------------------------------------------------------------
+---
 
 ## Instructions
 
 ### Install
 
-#### Users
+#### Users
 
 1. Clone the source code with `git clone git@github.com:alan-turing-institute/bio-Turing-Way`
 1. Change to the source code directory with `cd bio-Turing-Way/`
