@@ -49,7 +49,7 @@ jobs:
       - name: pre-commit
         uses: pre-commit/action@v2.0.3
         with:
-          extra_args: --files ./**/*
+          extra_args: --files pathways/tests/*
 
       - name: Run unit tests
         run: |
