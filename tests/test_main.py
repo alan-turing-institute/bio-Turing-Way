@@ -5,7 +5,7 @@ from unittest import mock
 
 from yaml import Loader, load
 
-from main import get_toc_and_profiles, main, mask_parts, mask_toc
+from main import generate_landing_name, get_toc_and_profiles, main, mask_parts, mask_toc
 
 
 class TestMain(unittest.TestCase):
@@ -210,6 +210,18 @@ class TestGetTocAndProfiles(unittest.TestCase):
 
                 self.assertEqual(44, toc)
                 self.assertEqual(44, profiles)
+
+
+class TestGenerateLandingPageName(unittest.TestCase):
+    def test_lowercase(self):
+        expected = "dsg"
+        actual = generate_landing_name("Dsg")
+        self.assertEqual(expected, actual)
+
+    def test_spaces(self):
+        expected = "enrichment-students"
+        actual = generate_landing_name("Enrichment Students")
+        self.assertEqual(expected, actual)
 
 
 if __name__ == "__main__":

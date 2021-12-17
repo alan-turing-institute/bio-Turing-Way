@@ -1,11 +1,11 @@
-- name: dsg
+- name: Dsg
   files:
     - welcome
     - communication/communication
     - communication/comms-overview
     - communication/comms-overview/comms-overview-principles
   colour: brown
-- name: enrichment
+- name: 'enrichment students'
   files:
     - welcome
     - reproducible-research/reproducible-research
