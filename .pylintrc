@@ -147,7 +147,6 @@ disable=abstract-method,
         use-dict-literal,
         consider-using-f-string,
         fixme,
-        missing-function-docstring,
         import-error
 
 

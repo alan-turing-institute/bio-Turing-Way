@@ -51,6 +51,13 @@ jobs:
         with:
           extra_args: --files pathways/tests/*
 
+      - name: local-pre-commit
+        shell: bash
+        run: |
+          pre-commit install
+          pre-commit run --files tests/*
+          pre-commit run --files pathways/*
+
       - name: Run unit tests
         run: |
           poetry run ./run_tests.sh
