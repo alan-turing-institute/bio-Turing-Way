@@ -4,6 +4,7 @@ from argparse import ArgumentParser
 from pathlib import Path
 from shutil import copytree
 from subprocess import run
+from sys import exit as sys_exit
 
 from yaml import Loader, load
 
@@ -99,10 +100,15 @@ def main(args):
     )
     build_subparser.set_defaults(func=pathways)
 
-    # Call the sub-parser's function with the other arguments
     arguments = parser.parse_args(args)
     arg_dict = vars(arguments)
-    arg_dict.pop("func")(**arg_dict)
+
+    if arg_dict.get("func"):
+        # Call the sub-parser's function with the other arguments
+        arg_dict.pop("func")(**arg_dict)
+    else:
+        parser.print_help(sys.stderr)
+        sys_exit(1)
 
 
 def mask_parts(components, whitelist):
