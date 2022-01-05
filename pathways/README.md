@@ -1,4 +1,4 @@
-# My Jupyter Book
+# How to set up environment to use "add-persona" feature
 
 ![Codestyle Black](https://img.shields.io/badge/code%20style-black-000000.svg)
 
@@ -13,6 +13,7 @@
 1. Clone the source code with `git clone git@github.com:alan-turing-institute/bio-Turing-Way`
 1. Change to the source code directory with `cd bio-Turing-Way/`
 1. Install with `pip install pathways/` (the `/` is mandatory)
+2. Install jupyter-book dependencies with `pip install -r master/requirements.txt`
 
 #### Developers
 
@@ -24,7 +25,8 @@
 
 ### Run
 
-1. With pathways installed, you can run with `python -m pathways.main --help`
+1. With pathways installed, you can run `python -m pathways.main --help` for help.
+2. Run `python -m pathways.main pathways master` to create a new book with personas.
 
 ### Testing
 
