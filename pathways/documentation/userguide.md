@@ -33,16 +33,16 @@ Go to `/master/profiles.yml`
 <img src="image_profilesYAML.png" alt="drawing" width="500"/>
 
 
-This YAML file defines which pages are included for different "user profiles". 
+This YAML file defines which pages are included for different "user profiles", which you can add to. 
 
 ### Add new user profile/pathway
 
-`- name: ` defines the user profile or pathway name. 
+`- name: ` defines the user profile or pathway name. This will be used in the tags, the landing page title, and the card.  
 
 ### Include pages
 The relative paths for each of the pages from the Turing Way are included under `files:`. Relative links follow the directory structure of the original markdown files, and are equivilent syntax to including links to other pages in markdown.
 
->**Important:** You cannot have a page without its parents or it will not appear in the landing page. So it is not possible to have `communications/comms-overview/comms-overview-principles` without `communications/comms-overview/`. Orphan pages will be tagged. 
+>**Important:** You cannot have a page without its parents or it will not appear in the landing page. So it is not possible to have `communications/comms-overview/comms-overview-principles` without `communications/comms-overview/`. Orphan pages missing from the landing page will be tagged. 
 
 ### Decide the colour
 `colour:` defines the colour of the card and the tag button that appears on every included page.
@@ -69,12 +69,12 @@ Currently, the cards are created under the heading _Different Pathways_.
 
 The script `pathways/pathways/card.py` looks for a specified line of text in the Welcome Page markdown file and inserts the card panels after it. 
 
-Currently, the cards are created under the heading _## Different Pathways_.
+Currently, the cards are created under the heading `## Different Pathways`.
 
 
 <img src="image_cardPY.png" alt="drawing" width="500"/>
 
-Which looks for the string within the markdown file (highlighted on Line 28):
+The script looks for the specified string (highlighted on Line 28) within the Welcome Page markdown file:
 
 <img src="image_markdown.png" alt="drawing" width="500"/>
 
@@ -94,6 +94,7 @@ To alter the number of included pages in the card, look for a function within `c
 <img src="image_cardfunction.png" alt="drawing" width="800"/>
 
 
+> Changing this will require reinstallation of the dependencies, see "Part 03 - Dependencies and Library Install" below for futher details. 
 
 ### Edit the appearance of the cards and the panel
 
@@ -105,6 +106,7 @@ For example, edit these properties in the function `create_panel`.
 
 <img src="image_panelfunction.png" alt="drawing" width="600"/>
 
+> Changing this will require reinstallation of the dependencies, see "Part 03 - Dependencies and Library Install" below for futher details. 
 
 ## Part 03: Running the Script and Tests
 

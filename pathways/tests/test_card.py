@@ -54,7 +54,7 @@ class TestInsertTextAfterString(unittest.TestCase):
     """Tests for the insert_text_after_string function."""
 
     def test_simple(self):
-        input_str = "## Different Profiles"
+        input_str = "## Different Pathways"
         panel_str = (
             ":::{panels}\n"
             ":container: +full-width\n"
@@ -67,8 +67,8 @@ class TestInsertTextAfterString(unittest.TestCase):
             "two"
             "\n::: \n"
         )
-        expected = "## Different Profiles\n" + panel_str
-        actual = insert_text_after_string(input_str, "## Different Profiles", panel_str)
+        expected = "## Different Pathways\n" + panel_str
+        actual = insert_text_after_string(input_str, "## Different Pathways", panel_str)
         self.assertEqual(expected, actual)
 
 
