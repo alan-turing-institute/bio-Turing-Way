@@ -1,6 +1,6 @@
 """Create Cards for the Welcome page."""
 
-HEADING_TITLE = "## Different Profiles"
+HEADING_TITLE = "## Different Pathways"
 
 
 def insert_into_md(path_welcome_md, heading_title, panel_string):
