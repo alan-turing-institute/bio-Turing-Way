@@ -2,19 +2,19 @@
 
 The Turing Way now has curated pages for different users, known as Pathways. 
 
-<img src="image_panel.png" alt="drawing" width="500"/> 
+<img src="image_panel.png" alt="drawing" width="700"/> 
 
 _The panel on the Welcome Page for the Turing Way._
 
 ---
 
-<img src="image_landingpage.png" alt="drawing" width="400"/>
+<img src="image_landingpage.png" alt="drawing" width="500"/>
 
 _Each pathway has a landing page with links to specified pages across the Turing Way._ 
 
 
 ---
-<img src="image_tags.png" alt="drawing" width="500"/>
+<img src="image_tags.png" alt="drawing" width="700"/>
 
 _Each page has a tag showing which pathway it belongs to, which links back to the landing page._ 
 
