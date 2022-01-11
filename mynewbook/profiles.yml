@@ -1,9 +1,6 @@
-Enrichment:
-  - intro
-  - subfolder/mymarkdownfile
-  - markdown
-DSG:
-  - intro
-  - some/thing
-  - markdown
-
+- name: Enrichment
+  files:
+    - intro
+    - subfolder/mymarkdownfile
+    - markdown
+  colour: brown

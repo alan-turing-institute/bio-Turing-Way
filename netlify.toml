@@ -1,7 +1,7 @@
 [build]
-  base = "master"
-  command = "pip install -r requirements.txt && python ../main.py build ."
-  publish = "_build/html"
+  base = "."
+  command = "pip install pathways/ && pip install -r master/requirements.txt && python -m pathways.main pathways master/"
+  publish = "master_copy/_build/html"
 
 # Do not build deploy previews for branches from all-contributors bot
 [context.deploy-preview]
@@ -15,15 +15,15 @@ fi
 
 # A redirect rule with all the supported properties
 [[redirects]]
-  from = "https://the-turing-way.netlify.app"
-  to = "https://the-turing-way.netlify.app/welcome"
+  from = "https://the-turing-way-personas.netlify.app"
+  to = "https://the-turing-way-personas.netlify.app/welcome"
   # The default HTTP status code is 301, but you can define a different one.
   status = 301
   force = true
 
 [[redirects]]
-  from = "https://the-turing-way.netlify.app/introduction/*"
-  to = "https://the-turing-way.netlify.app/welcome"
+  from = "https://the-turing-way-personas.netlify.app/introduction/*"
+  to = "https://the-turing-way-personas.netlify.app/welcome"
   # The default HTTP status code is 301, but you can define a different one.
   status = 301
   force = true
@@ -216,6 +216,3 @@ fi
   # The default HTTP status code is 301, but you can define a different one.
   status = 301
   force = true
-
-
-

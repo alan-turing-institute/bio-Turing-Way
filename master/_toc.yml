@@ -13,6 +13,7 @@ format: jb-book
 root: welcome
 parts:
 - chapters:
+
 # ===== Guide for Reproducible Research ========================================
   - file: reproducible-research/reproducible-research
     sections:
@@ -229,7 +230,7 @@ parts:
       - title: A Statistical Methods Manuscript
         file: reproducible-research/case-studies/case-study-statistical
 
-# ===== Guide for Project Design ========================================
+  # ===== Guide for Project Design ========================================
 
   - file: project-design/project-design
     sections:
@@ -345,8 +346,8 @@ parts:
       - title: Communication Channels
         file: communication/os-comms/os-comms-channels
 
-# ===== Guide for Collaboration ========================================
-  
+  # ===== Guide for Collaboration ========================================
+
   - file: collaboration/collaboration
     sections:
     - title: Getting Started With GitHub

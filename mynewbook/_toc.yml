@@ -6,5 +6,6 @@ parts:
     sections:
     - title: Overview
       file: subfolder/mymarkdownfile
-    - title: Definitions
-      file: some/thing
+    sections:
+      - title: Definitions
+        file: some/thing

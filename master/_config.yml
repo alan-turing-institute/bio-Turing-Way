@@ -5,7 +5,7 @@
 
 #######################################################################################
 # Book settings
-title                       : The Turing Way  # The title of the book. Will be placed in the left navbar.
+title                       : The Turing Way - Personas # The title of the book. Will be placed in the left navbar.
 author                      : The Turing Way Community  # The author of the book
 copyright                   : "2020-2021"  # Copyright year to be placed in the footer
 logo                        : "./figures/logo/logo.jpg"  # A path to the book logo
@@ -29,7 +29,7 @@ html:
   use_repository_button     : true  # Whether to add an "Repository" button to pages. If `true`, repository information in repository: must be filled in
   use_issues_button         : true # Whether to add an "Open issue" button to pages. If `true`, repository information in repository: must be filled in
   use_edit_page_button      : true  # Whether to add an "Suggest edit" button to pages. If `true`, repository information in repository: must be filled in
-  baseurl                   : "https://the-turing-way.netlify.com"  # The base URL where your book will be hosted. Used for creating image previews and social links. for example: https://mypage.com/mybook/
+  baseurl                   : "https://the-turing-way-personas.netlify.com"  # The base URL where your book will be hosted. Used for creating image previews and social links. for example: https://mypage.com/mybook/
   extra_navbar              : Visit our <a href="https://github.com/alan-turing-institute/the-turing-way">GitHub Repository</a>
     <div>This book is powered by <a href="https://jupyterbook.org">Jupyter Book</a></div>
   comments:
@@ -53,7 +53,7 @@ sphinx:
   extra_extensions          :  # A list of extra extensions to load by Sphinx.
   config                    :  # key-value pairs to directly over-ride the Sphinx configuration
     language                : en
-    
+
 bibtex_bibfiles:
     - _bibliography/references.bib
 

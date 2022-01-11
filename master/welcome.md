@@ -25,54 +25,8 @@ alt: The Turing Way project is illustrated as a road or path with shops for diff
 _The Turing Way_ project illustration by Scriberia. Zenodo. [http://doi.org/10.5281/zenodo.3332807](http://doi.org/10.5281/zenodo.3332807)
 ```
 
-:::{panels}
-:container: +full-width 
-:column: col-lg-6 px-2 py-2
-:header: text-center bg-white
-:card: text-left shadow
-:footer: text-left
-​
-​
-```{link-button} https://the-turing-way-choose-your-own-adventure.netlify.app/pathway/dsg/welcome.html
-    :text: DSG
-    :classes: bg-info text-white text-center font-weight-bold
-```
-^^^
+## Different Pathways
 
-- Welcome
-- Guide for Communication
-- Overview of the Guide for Communication
-- Principles of Communicating with Wider Audiences ​
-​
----
-​
-```{link-button} https://the-turing-way-choose-your-own-adventure.netlify.app/pathway/enrichment/welcome.html
-    :text: Enrichment
-    :classes: bg-info text-white text-center font-weight-bold
-```
-^^^
-​
-- Welcome
-- Definitions
-- Added Advantages
-- Barriers to reproducibility
-- Resources ​
-​
----
-​
-```{link-button} https://the-turing-way-choose-your-own-adventure.netlify.app/pathway/group-leader/welcome.html
-    :text: Group Leaders
-    :classes: bg-info text-white text-center font-weight-bold
-```
-^^^
-​
-- Welcome
-- Overview of Project Design
-- Planning for Project Design
-- Reproducibility Methods
-- Version Control and Documentation ​
-​
-:::
 
 (welcome-community)=
 ## Our Community
