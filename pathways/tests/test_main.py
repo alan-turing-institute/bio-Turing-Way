@@ -18,11 +18,16 @@ class TestMain(unittest.TestCase):
     """Test main function from the main module."""
 
     def test_main(self):
-        # Redirect stdout
         with mock.patch("pathways.main.pathways") as mock_build:
             main(["pathways", "/path/to/my/book/"])
 
             mock_build.assert_called_once_with(book_path=Path("/path/to/my/book/"))
+
+    def test_no_args(self):
+        # Should print help message and exit
+        with mock.patch("pathways.main.sys_exit") as mock_exit:
+            main([])
+            mock_exit.assert_called_once_with(1)
 
 
 class TestMask(unittest.TestCase):
