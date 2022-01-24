@@ -133,8 +133,8 @@ dmypy.json
 /mynewbook_copy/
 
 # vscode stuff
- dsg/.DS_Store
- .DS_Store
- .vscode/
+dsg/.DS_Store
+.DS_Store
+.vscode/
 .fake
 .ionide
