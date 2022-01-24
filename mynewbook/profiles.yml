@@ -1,6 +1,0 @@
-- name: Enrichment
-  files:
-    - intro
-    - subfolder/mymarkdownfile
-    - markdown
-  colour: brown
