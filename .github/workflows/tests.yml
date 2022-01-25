@@ -46,17 +46,18 @@ jobs:
         run: |
           python -m poetry install
 
-      - name: pre-commit
+      # Only used to install pre-commit, not to run it
+      - name: Install pre-commit
         uses: pre-commit/action@v2.0.3
         with:
-          extra_args: --files pathways/tests/*
+          extra_args: --files path/does/not/exist/*
 
-      - name: local-pre-commit
+      # Now we install the hooks and run pre-commit
+      - name: Local pre-commit
         shell: bash
         run: |
           pre-commit install
-          pre-commit run --files tests/*
-          pre-commit run --files pathways/*
+          pre-commit run --all-files
 
       - name: Run unit tests
         run: |
