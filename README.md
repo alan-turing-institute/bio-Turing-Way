@@ -1,9 +1,9 @@
 # Bio-Turing-Way
 
-This is a repo for exploring ways to deploy multiple pathways for the Turing Way Jupyter Book. 
+This is a repo for exploring ways to deploy multiple pathways for the Turing Way Jupyter Book.
 The goal is:
 
-1. Maintain a `main` book, which contains the entire book. 
+1. Maintain a `main` book, which contains the entire book.
 2. There will be multiple `pathways` which are sets of Turing Way pages which are selected for specific audiences. For example the pages about Reproducibility and Communication may be selected for the DSG pathway. Project Design pages may be selected for the Group-Leader pathway.
 3. We are trying to find a way to deploy multiple pathways, OR to enable access to pathways with good user experience.
 
