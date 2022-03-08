@@ -2,6 +2,8 @@
 
 ![Codestyle Black](https://img.shields.io/badge/code%20style-black-000000.svg)
 
+**See [User Guide for Turing Way Pathways](documentation.md) for details on how to use this package for *[The Turing Way](https://github.com/alan-turing-institute/the-turing-way)***.
+
 ---
 
 ## Instructions

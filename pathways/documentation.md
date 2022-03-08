@@ -1,20 +1,22 @@
 # User Guide for Turing Way Pathways
 
-The Turing Way now has curated pages for different users, known as Pathways. 
+Package developed in the repository allows *[The Turing Way](https://github.com/alan-turing-institute/the-turing-way)* to provide different entry points, referred in this repository as Pathways, for users to browse curated chapters based on their user profiles or personas. 
 
-<img src="image_panel.png" alt="drawing" width="700"/> 
+This documentation provide step by step guide for new users.
+
+<img src="images/image_panel.png" alt="drawing" width="700"/> 
 
 _The panel on the Welcome Page for the Turing Way._
 
 ---
 
-<img src="image_landingpage.png" alt="drawing" width="500"/>
+<img src="images/image_landingpage.png" alt="drawing" width="500"/>
 
 _Each pathway has a landing page with links to specified pages across the Turing Way._ 
 
 
 ---
-<img src="image_tags.png" alt="drawing" width="700"/>
+<img src="images/image_tags.png" alt="drawing" width="700"/>
 
 _Each page has a tag showing which pathway it belongs to, which links back to the landing page._ 
 
@@ -30,7 +32,7 @@ A new pathway, also known as user profile, is a curated table of contents for a 
 Go to `/master/profiles.yml`
 
 
-<img src="image_profilesYAML.png" alt="drawing" width="500"/>
+<img src="images/image_profilesYAML.png" alt="drawing" width="500"/>
 
 
 This YAML file defines which pages are included for different "user profiles", which you can add to. 
@@ -47,14 +49,14 @@ The relative paths for each of the pages from the Turing Way are included under 
 ### Decide the colour
 `colour:` defines the colour of the card and the tag button that appears on every included page.
 
-<img src="image_tagbig.png" alt="drawing" width="800"/>
+<img src="images/image_tagbig.png" alt="drawing" width="800"/>
 
 All CSS colour names should be supported. 
 
 
 ## Part 02: The Card Panel on the Welcome Page
 
-<img src="image_panel.png" alt="drawing" width="800"/>
+<img src="images/image_panel.png" alt="drawing" width="800"/>
 
 
 ### Default behaviour
@@ -72,11 +74,11 @@ The script `pathways/pathways/card.py` looks for a specified line of text in the
 Currently, the cards are created under the heading `## Different Pathways`.
 
 
-<img src="image_cardPY.png" alt="drawing" width="500"/>
+<img src="images/image_cardPY.png" alt="drawing" width="500"/>
 
 The script looks for the specified string (highlighted on Line 28) within the Welcome Page markdown file:
 
-<img src="image_markdown.png" alt="drawing" width="500"/>
+<img src="images/image_markdown.png" alt="drawing" width="500"/>
 
 
 Alter both these files to change where the card panel appears on the Welcome Page, or otherwise when the "Different Pathways" heading is edited. 
@@ -91,7 +93,7 @@ Currently the first four pages for each profile/pathway are linked within the ca
 
 To alter the number of included pages in the card, look for a function within `card.py` called `create_bullet_string` and change the number in the `for` (Line 37) and `if` (Line 40) from 3 to another value. 
 
-<img src="image_cardfunction.png" alt="drawing" width="800"/>
+<img src="images/image_cardfunction.png" alt="drawing" width="800"/>
 
 
 > Changing this will require reinstallation of the dependencies, see "Part 03 - Dependencies and Library Install" below for futher details. 
@@ -104,7 +106,7 @@ https://sphinx-panels.readthedocs.io/en/latest/#card-layout
 
 For example, edit these properties in the function `create_panel`. 
 
-<img src="image_panelfunction.png" alt="drawing" width="600"/>
+<img src="images/image_panelfunction.png" alt="drawing" width="600"/>
 
 > Changing this will require reinstallation of the dependencies, see "Part 03 - Dependencies and Library Install" below for futher details. 
 
