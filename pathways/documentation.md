@@ -1,6 +1,8 @@
 # User Guide for Turing Way Pathways
 
-The Turing Way now has curated pages for different users, known as Pathways. 
+Package developed in the repository allows *[The Turing Way](https://github.com/alan-turing-institute/the-turing-way)* to provide different entry points, referred in this repository as Pathways, for users to browse curated chapters based on their user profiles or personas. 
+
+This documentation provide step by step guide for new users.
 
 <img src="images/image_panel.png" alt="drawing" width="700"/> 
 
