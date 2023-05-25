@@ -18,7 +18,7 @@ class LandingPage:
     # This is the path of the jupyter book
     book_path = ""
 
-    def __init__(self, persona="", landing_name=""):
+    def __init__(self, persona="", landing_name="", description=""):
         # This is the audience label
         self.persona = persona
         #  This is the title of the landing page
@@ -28,6 +28,7 @@ class LandingPage:
         self.landing_page_path = os.path.join(self.book_path, landing_name)
         # This is the instance of the class used to generate a markdown file.
         # It is instantiated with the name of the file.
+        self.description = description
         self.md_file = mdutils.MdUtils(file_name=self.landing_page_path)
         self.curated_links = []
 
@@ -97,8 +98,10 @@ class LandingPage:
 
     def write_content(self):
         """Populate landing page with curated toc"""
+        self.md_file.new_paragraph(self.description)
+
         self.md_file.new_header(
-            level=1, title=self.landing_page_title, add_table_of_contents="n"
+            level=3, title=self.landing_page_title, add_table_of_contents="n"
         )
         intro_paragraph = "These are the pages curated for {0}".format(
             self.persona.upper()
