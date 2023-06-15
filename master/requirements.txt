@@ -1,6 +1,7 @@
 # Requirements for the demo notebooks
 # Useful for MyBinder configuration
 pandas==1.0.5
+Jinja2==3.0.3
 numpy==1.19.0
 matplotlib==3.2.2
 datascience
