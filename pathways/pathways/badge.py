@@ -6,32 +6,40 @@ import urllib
 def generate_badge(profile_name, colour, landing_name):
     """Return some badge markdown and a list of files to insert it into."""
 
-    url = generate_shields_link(profile_name, colour)
-    landing_page = "{0}.md".format(landing_name)
-    markdown = f"[![]({url})](/{landing_page})"
+    url = generate_shields_link()
+    #landing_page = "{0}.md".format(landing_name)
+    markdown = f"[![]({url})]()"
     return markdown
 
-
-def generate_shields_link(profile_name, colour):
+def generate_shields_link():
     """Generate a https://shields.io/ URL for this profile."""
 
     url = (
         "https://img.shields.io/static/v1"
         "?label=pathway"
-        f"&message={urllib.parse.quote(profile_name)}"
-        f"&color={colour}"
+        "&message=text"
     )
     return url
 
 
 def insert_badges(book_path, badges, profiles):
+   # print(profiles["files"])
     """Insert badges into the files specified by profiles."""
 
     # By using make_badge_dict(), we only need to open each file once
     badge_dict = make_badge_dict(badges, profiles)
 
     for key, value in badge_dict.items():
-        # value is a list of badges and key is a filename
+        code ="""<script> 
+        const images = document.querySelectorAll('img[src="https://img.shields.io/static/v1?label=pathway&message=text"]');
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const pathwayValue = urlSearchParams.get('pathway');
+        for (let i = 0; i <= images.length; i++) {
+        images[i].setAttribute('src', `https://img.shields.io/static/v1?label=pathway&message=${pathwayValue}`);
+       }
+
+        </script>
+        """
         with open(book_path / (key + ".md"), "r", encoding="utf-8") as f:
             text = f.read()
 
@@ -39,6 +47,7 @@ def insert_badges(book_path, badges, profiles):
 
         with open(book_path / (key + ".md"), "w", encoding="utf-8") as f:
             f.write(text)
+            f.write(code)
 
 
 def edit_text(badges, text):
@@ -57,14 +66,9 @@ def edit_text(badges, text):
 def make_badge_dict(badges, profiles):
     """Make a dict of files and their badges."""
     badge_dict = dict()
-
-    for badge, profile in zip(badges, profiles):
+    for profile in profiles:
         for filename in profile["files"]:
-            if filename in badge_dict:
-                entry = badge_dict[filename]
-                entry.append(badge)
-
-            else:
-                badge_dict[filename] = [badge]
+            if filename not in badge_dict:
+                badge_dict[filename] = ['[![](https://img.shields.io/static/v1?label=pathway&message=text)]()']
 
     return badge_dict
