@@ -6,40 +6,67 @@ import urllib
 def generate_badge(profile_name, colour, landing_name):
     """Return some badge markdown and a list of files to insert it into."""
 
-    url = generate_shields_link()
-    #landing_page = "{0}.md".format(landing_name)
-    markdown = f"[![]({url})]()"
+    url = generate_shields_link(profile_name,colour)
+    landing_page = "{0}.md".format(landing_name)
+    markdown = f"[![]({url})](/{landing_page})"
+
+
     return markdown
 
-def generate_shields_link():
+def generate_shields_link(profile_name,colour):
     """Generate a https://shields.io/ URL for this profile."""
 
     url = (
         "https://img.shields.io/static/v1"
         "?label=pathway"
-        "&message=text"
+        f"&message={urllib.parse.quote(profile_name)}"
+        f"&color={colour}"
     )
     return url
 
 
 def insert_badges(book_path, badges, profiles):
-   # print(profiles["files"])
+
     """Insert badges into the files specified by profiles."""
 
     # By using make_badge_dict(), we only need to open each file once
-    badge_dict = make_badge_dict(badges, profiles)
+    badge_dict= make_badge_dict(badges, profiles)
 
     for key, value in badge_dict.items():
-        code ="""<script> 
-        const images = document.querySelectorAll('img[src="https://img.shields.io/static/v1?label=pathway&message=text"]');
-        const urlSearchParams = new URLSearchParams(window.location.search);
-        const pathwayValue = urlSearchParams.get('pathway');
-        for (let i = 0; i <= images.length; i++) {
-        images[i].setAttribute('src', `https://img.shields.io/static/v1?label=pathway&message=${pathwayValue}`);
-       }
+        code = """<script>
+    const images = document.querySelectorAll('img[src^="https://img.shields.io/static/v1?label=pathway"]');
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const pathwayValue = urlSearchParams.get('pathway');
+    let landingName = pathwayValue.split(' ').join('-');
+    let colour = "blue";
+   
 
-        </script>
-        """
+    if (pathwayValue === "data study group") {
+        colour = "white";
+    } else if (pathwayValue === "phd students") {
+        colour = "blue";
+    } else if (pathwayValue === "group leaders") {
+        colour = "purple";
+    } else {
+        colour = "green";
+    }
+
+    if (pathwayValue !== null) {
+        var landingPage = pathwayValue.replace(/ /g, "-");
+        for (let i = 0; i < images.length; i++) {
+            if (i > 0) {
+                images[i].remove();
+            } else {
+                images[i].setAttribute('src', `https://img.shields.io/static/v1?label=pathway&message=${pathwayValue}&color=${colour}`);
+                const parent = images[i].closest('a');
+                parent.href= "../" + landingPage + ".html";
+
+              }
+          }
+        }
+    </script>
+  """
+
         with open(book_path / (key + ".md"), "r", encoding="utf-8") as f:
             text = f.read()
 
@@ -63,12 +90,18 @@ def edit_text(badges, text):
     return text
 
 
+
 def make_badge_dict(badges, profiles):
     """Make a dict of files and their badges."""
     badge_dict = dict()
-    for profile in profiles:
+
+    for badge, profile in zip(badges, profiles):
         for filename in profile["files"]:
-            if filename not in badge_dict:
-                badge_dict[filename] = ['[![](https://img.shields.io/static/v1?label=pathway&message=text)]()']
+            if filename in badge_dict:
+                entry = badge_dict[filename]
+                entry.append(badge)
+
+            else:
+                badge_dict[filename] = [badge]
 
     return badge_dict

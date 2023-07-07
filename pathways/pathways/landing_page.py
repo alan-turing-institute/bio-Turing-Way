@@ -100,7 +100,7 @@ class LandingPage:
 
     def write_content(self):
         code = '''<script> 
-                const links = document.querySelectorAll('a');
+                const links = document.querySelectorAll('#main-content a');
                 const path = decodeURIComponent(window.location.pathname);
                 const groups = path.split("/");
                 const groupName = groups[groups.length - 1].replace(/\.html$/, "").replace(/-/g, " ");
