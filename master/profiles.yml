@@ -12,6 +12,8 @@
     - collaboration/github-novice/github-novice-advanced
     - collaboration/leadership
   colour: white
+  description: consectetur adipiscing elit. Sed nec mauris quis magna consequat consequat vel quis odio. Sed nec arcu malesuada, aliquam erat eget, bibendum nisi. Nunc varius, odio eu molestie euismod, sapien ipsum vulputate eros, sed lacinia nisl sapien eu nisi. Nulla facilisi. Nullam vulputate, odio sed tempor rutrum, est ipsum ultrices lorem, a feugiat velit magna in metus.
+
 - name: PhD Students
   files:
     - communication/communication
@@ -20,6 +22,8 @@
     - reproducible-research/reproducible-research
     - reproducible-research/overview
   colour: blue
+  description: PhD students are early career researchers who may not have a lot of hands on experience with contributing to research projects from the start to finish. This curated set of chapters will allow them to understand what practices apply to their research at different stages of development.
+
 - name: Group Leaders
   files:
     - project-design/project-design
@@ -38,6 +42,8 @@
     - reproducible-research/open/open-data
     - reproducible-research/open/open-source
   colour: purple
+  description: Fusce euismod mi eget neque sollicitudin, ut rhoncus tellus bibendum. Duis vitae fermentum quam, at bibendum nibh. Proin eu tellus turpis. Aliquam sodales eleifend sapien, vel fringilla risus faucibus at. Fusce vulputate libero eget ipsum dapibus, ut convallis est pharetra. Maecenas in dolor mauris.
+
 - name: Life Scientists
   files:
     - reproducible-research/reproducible-research
@@ -49,3 +55,4 @@
     - reproducible-research/open/open-data
     - reproducible-research/open/open-source
   colour: green
+  description: Nullam sed dolor erat. Sed gravida metus at leo commodo, sed rutrum elit accumsan. Fusce vestibulum, velit ac imperdiet mattis, eros nisl luctus augue, ut bibendum risus magna eu velit. Morbi pharetra mauris sed sagittis feugiat. Duis scelerisque quam ac urna faucibus dignissim. Sed vel blandit sapien, id lacinia risus. Donec sit amet quam vestibulum, imperdiet felis non, rhoncus velit.

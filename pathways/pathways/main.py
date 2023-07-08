@@ -29,9 +29,9 @@ def generate_card(profile: dict, landing_name):
     return create_card(profile["name"], profile["files"], landing_name=landing_name)
 
 
-def generate_landing_page(profile, toc, landing_name):
+def generate_landing_page(profile, toc, landing_name, description):
     a_landing_page = landing_page.LandingPage(
-        persona=profile, landing_name=landing_name
+        persona=profile, landing_name=landing_name, description=description
     )
     a_landing_page.gather_curated_links(toc)
     return a_landing_page
@@ -73,7 +73,10 @@ def pathways(book_path):
         badges.append(generate_badge(profile["name"], profile["colour"], landing_name))
         landing_pages.append(
             generate_landing_page(
-                profile["name"], generate_toc(toc, profile), landing_name
+                profile["name"],
+                generate_toc(toc, profile),
+                landing_name,
+                profile["description"],
             )
         )
 
@@ -128,7 +131,6 @@ def mask_parts(components, whitelist):
 
     # We could have a list of parts, chapters or sections
     for component in components:
-
         new_component = dict()
 
         for key, value in component.items():
@@ -142,7 +144,6 @@ def mask_parts(components, whitelist):
                     new_component[key] = sub_components
 
         if new_component:
-
             # Add other entries, like "title": "my title"
             for key, value in component.items():
                 if key not in ("file", "parts", "chapters", "sections"):
