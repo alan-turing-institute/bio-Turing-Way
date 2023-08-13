@@ -99,20 +99,6 @@ class LandingPage:
         return header_content
 
     def write_content(self):
-        code = '''<script> 
-                const links = document.querySelectorAll('#main-content a');
-                const path = decodeURIComponent(window.location.pathname);
-                const groups = path.split("/");
-                const groupName = groups[groups.length - 1].replace(/\.html$/, "").replace(/-/g, " ");
-                links.forEach(link => {
-                const href = link.getAttribute('href');
-                const url = new URL(href, window.location.href);
-                url.searchParams.set('pathway', groupName);
-                link.setAttribute('href', url.href);
-                });
-                </script>
-                '''
-        """Populate landing page with curated toc"""
         self.md_file.new_header(
             level=1, title=self.persona , add_table_of_contents="n"
         )
@@ -123,7 +109,6 @@ class LandingPage:
         )
         self.md_file.new_paragraph(intro_paragraph)
         self.md_file.new_list(self.curated_links)
-        self.md_file.write(code)
         self.md_file.create_md_file()
 
         return self.md_file.file_data_text

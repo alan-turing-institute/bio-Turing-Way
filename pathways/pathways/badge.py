@@ -33,39 +33,6 @@ def insert_badges(book_path, badges, profiles):
     badge_dict= make_badge_dict(badges, profiles)
 
     for key, value in badge_dict.items():
-        code = """<script>
-    const images = document.querySelectorAll('img[src^="https://img.shields.io/static/v1?label=pathway"]');
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    const pathwayValue = urlSearchParams.get('pathway');
-    let landingName = pathwayValue.split(' ').join('-');
-    let colour = "blue";
-   
-
-    if (pathwayValue === "data study group") {
-        colour = "white";
-    } else if (pathwayValue === "phd students") {
-        colour = "blue";
-    } else if (pathwayValue === "group leaders") {
-        colour = "purple";
-    } else {
-        colour = "green";
-    }
-
-    if (pathwayValue !== null) {
-        var landingPage = pathwayValue.replace(/ /g, "-");
-        for (let i = 0; i < images.length; i++) {
-            if (i > 0) {
-                images[i].remove();
-            } else {
-                images[i].setAttribute('src', `https://img.shields.io/static/v1?label=pathway&message=${pathwayValue}&color=${colour}`);
-                const parent = images[i].closest('a');
-                parent.href= "../" + landingPage + ".html";
-
-              }
-          }
-        }
-    </script>
-  """
 
         with open(book_path / (key + ".md"), "r", encoding="utf-8") as f:
             text = f.read()
@@ -73,8 +40,7 @@ def insert_badges(book_path, badges, profiles):
         text = edit_text(value, text)
 
         with open(book_path / (key + ".md"), "w", encoding="utf-8") as f:
-            f.write(text)
-            f.write(code)
+            f.write(text)       
 
 
 def edit_text(badges, text):
