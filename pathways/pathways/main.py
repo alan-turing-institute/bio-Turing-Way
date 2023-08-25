@@ -80,7 +80,7 @@ def pathways(book_path):
             )
         )
 
-    insert_cards(new_path / "welcome.md", cards)
+    insert_cards(new_path / "index.md", cards)
     insert_landing_pages(landing_pages)
     insert_badges(new_path, badges, profiles)
 
