@@ -6,7 +6,6 @@ const styles = {
     container: {
         display: "flex",
         alignItems: "center",
-        
     },
     voiceListContainer: {
         display: "none",
@@ -31,19 +30,19 @@ window.createSpeechButton = async function () {
     const mainContent = document.getElementById("main-content");
     const clone = mainContent.cloneNode(true);
     Array.from(clone.getElementsByClassName("prev-next-area"))[0].remove();
-    const scripts =clone.getElementsByTagName("script");
+    const scripts = clone.getElementsByTagName("script");
     const scriptArray = Array.from(scripts);
-    scriptArray.forEach((sc)=>{
+    scriptArray.forEach((sc) => {
         sc.remove();
-    })
-   
-    const figureElements =clone.childNodes[1].getElementsByClassName("figure");
+    });
+
+    const figureElements = clone.childNodes[1].getElementsByClassName("figure");
     const other = clone.childNodes[1].getElementsByClassName("onlyprint");
     const array = Array.from(other);
     console.log(array);
     const figureArray = Array.from(figureElements);
     console.log(figureArray);
-    array.forEach((ele)=>{
+    array.forEach((ele) => {
         ele.remove();
     });
     figureArray.forEach((figure) => {
@@ -51,8 +50,12 @@ window.createSpeechButton = async function () {
     });
     let isSpeaking = false;
     const voices = EasySpeech.voices();
+
+    // Filter voices to include only English language options
+    const englishVoices = voices.filter((voice) => voice.lang.startsWith("en"));
+
     console.log(clone.innerText);
-    let selectedVoice = voices[0];
+    let selectedVoice = englishVoices[0]; // Select the first English voice by default
     let textToSpeak = clone.innerText;
 
     const speechButton = document.createElement("button");
@@ -80,7 +83,7 @@ window.createSpeechButton = async function () {
     function showVoiceList() {
         voiceList.innerHTML = "";
 
-        voices.forEach((voice, index) => {
+        englishVoices.forEach((voice, index) => {
             const voiceListItem = document.createElement("li");
             Object.assign(voiceListItem.style, styles.voiceListItem);
             voiceListItem.innerText = voice.name;
@@ -94,10 +97,17 @@ window.createSpeechButton = async function () {
             });
 
             voiceListItem.addEventListener("click", () => {
-                selectedVoice = voices[index];
+                selectedVoice = englishVoices[index];
                 console.log(selectedVoice, index);
                 EasySpeech.cancel();
-                speakText();
+                speechButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+                EasySpeech.speak({
+                text: textToSpeak,
+                voice: selectedVoice,
+                pitch: 2,
+                rate: 1,
+            });
+            isSpeaking = true;
                 voiceListContainer.style.display = "none";
             });
 
