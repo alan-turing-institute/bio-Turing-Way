@@ -53,8 +53,8 @@ sphinx:
   extra_extensions          :  # A list of extra extensions to load by Sphinx.
   config                    :  # key-value pairs to directly over-ride the Sphinx configuration
     language                : en
+    html_js_files:
+      - ['https://cdn.jsdelivr.net/npm/easy-speech/dist/EasySpeech.iife.js', {'defer': 'defer', 'data-domain': 'the-turing-way.netlify.app'}]
 
 bibtex_bibfiles:
     - _bibliography/references.bib
-
-# only_build_toc_files: true
