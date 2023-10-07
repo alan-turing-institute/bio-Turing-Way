@@ -77,9 +77,9 @@ def pathways(book_path):
                 generate_toc(toc, profile),
                 landing_name,
                 profile["description"],
-            )
+            ))
         
-    insert_cards(new_path / "index.md", cards)
+    insert_cards(book_path / "index.md", cards)
     insert_landing_pages(landing_pages)
     insert_badges(book_path, badges, profiles)
 
