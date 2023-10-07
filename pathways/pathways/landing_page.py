@@ -99,7 +99,6 @@ class LandingPage:
         return header_content
 
     def write_content(self):
-        """Populate landing page with curated toc"""
         self.md_file.new_header(
             level=1, title=self.persona , add_table_of_contents="n"
         )

@@ -56,11 +56,11 @@ def pathways(book_path):
     """Add extra pathways to the book."""
 
     # The contents of _toc.yml and profiles.yml contents
-    new_path = book_path.parent / (book_path.name + "_copy")
-    copytree(book_path, new_path, dirs_exist_ok=True)
+    #new_path = book_path.parent / (book_path.name + "_copy")
+    #copytree(book_path, new_path, dirs_exist_ok=True)
 
-    landing_page.LandingPage.book_path = new_path
-    toc, profiles = get_toc_and_profiles(new_path)
+    landing_page.LandingPage.book_path = book_path
+    toc, profiles = get_toc_and_profiles(book_path)
 
     landing_pages = []
     badges = []
@@ -77,14 +77,13 @@ def pathways(book_path):
                 generate_toc(toc, profile),
                 landing_name,
                 profile["description"],
-            )
-        )
-
-    insert_cards(new_path / "index.md", cards)
+            ))
+        
+    insert_cards(book_path / "index.md", cards)
     insert_landing_pages(landing_pages)
-    insert_badges(new_path, badges, profiles)
+    insert_badges(book_path, badges, profiles)
 
-    run(["jupyter-book", "build", new_path], check=True)
+    run(["jupyter-book", "build", book_path], check=True)
     # rmtree(new_path)
 
     print("Finished adding pathways.")
