@@ -1,5 +1,7 @@
 # Bio-Turing-Way
 
+**Note**: This repo is no longer maintained. The functional package developed in this repo has been moved to *The Turing Way* GitHub organisation: https://github.com/the-turing-way/pathways.
+
 This is a repo for exploring ways to deploy multiple pathways for the Turing Way Jupyter Book. 
 The goal is:
 
